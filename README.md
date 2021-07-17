@@ -55,4 +55,3 @@ The Docker files in this folder create docker images and run them to build Apach
 This project is reusing most of the code of 
 * https://github.com/apache/atlas/tree/master/dev-support/atlas-docker
 * https://github.com/apache/ranger/tree/master/dev-support/ranger-docker
-
