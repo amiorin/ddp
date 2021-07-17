@@ -19,6 +19,8 @@
 mkdir -p /etc/sep/catalog
 cd ${STARBURST_HOME} && ln -s /etc/sep etc
 
+cp ${STARBURST_DIST}/starburstdata.license /etc/sep/starburstdata.license
+
 cat <<EOF > ${STARBURST_HOME}/etc/config.properties
 coordinator=true
 node-scheduler.include-coordinator=true
