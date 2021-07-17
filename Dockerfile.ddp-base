@@ -1,0 +1,74 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM ubuntu:20.04
+
+
+# Install tzdata, Python, Java
+RUN apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata \
+    python python3 python3-pip openjdk-8-jdk jq vim bc iputils-ping ssh pdsh && \
+    pip3 install apache-atlas && \
+    pip3 install apache-ranger && \
+    pip3 install requests
+
+# Set environment variables
+ENV JAVA_HOME         /usr/lib/jvm/java-8-openjdk-amd64
+ENV PATH              /usr/java/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV ATLAS_DIST        /home/atlas/dist
+ENV ATLAS_SCRIPTS     /home/atlas/scripts
+ENV ATLAS_HOME        /opt/atlas
+ENV RANGER_DIST       /home/ranger/dist
+ENV RANGER_SCRIPTS    /home/ranger/scripts
+ENV RANGER_HOME       /opt/ranger
+ENV STARBURST_DIST    /home/starburst/dist
+ENV STARBURST_SCRIPTS /home/starburst/scripts
+ENV STARBURST_HOME    /opt/starburst
+
+# setup groups, users, directories
+RUN groupadd ranger && \
+    useradd -g ranger -ms /bin/bash ranger && \
+    useradd -g ranger -ms /bin/bash rangeradmin && \
+    useradd -g ranger -ms /bin/bash rangerusersync && \
+    useradd -g ranger -ms /bin/bash rangertagsync && \
+    useradd -g ranger -ms /bin/bash rangerkms && \
+    mkdir -p /home/ranger/dist && \
+    mkdir -p /home/ranger/scripts && \
+    chown -R ranger:ranger /home/ranger && \
+    mkdir -p /opt/ranger && \
+    chown -R ranger:ranger /opt/ranger && \
+    groupadd atlas && \
+    useradd -g atlas -ms /bin/bash atlas && \
+    mkdir -p /home/atlas/dist && \
+    mkdir -p /home/atlas/scripts && \
+    chown -R atlas:atlas /home/atlas && \
+    mkdir -p /opt/atlas && \
+    chown -R atlas:atlas /opt/atlas && \
+    groupadd starburst && \
+    useradd -g starburst -ms /bin/bash starburst && \
+    mkdir -p /home/starburst/dist && \
+    mkdir -p /home/starburst/scripts && \
+    chown -R starburst:starburst /home/starburst && \
+    mkdir -p /opt/starburst && \
+    chown -R starburst:starburst /opt/starburst && \
+    groupadd hadoop && \
+    useradd -g hadoop -ms /bin/bash hdfs && \
+    useradd -g hadoop -ms /bin/bash yarn && \
+    useradd -g hadoop -ms /bin/bash hive && \
+    useradd -g hadoop -ms /bin/bash hbase && \
+    useradd -g hadoop -ms /bin/bash kafka
+
+ENTRYPOINT [ "/bin/bash" ]
