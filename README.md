@@ -46,6 +46,12 @@ The Docker files in this folder create docker images and run them to build Apach
 
 1. Starburst Trino cli ```trino-cli --server=https://localhost --insecure --password --user ddp``` (ddp/ddpR0cks!)
 
+## Web
+* Starburst https://localhost/ui
+* Starburst https://localhost/ui/insights
+* Namenode http://localhost:9870
+* Resource Manager http://localhost:8088
+
 ## Containers
 * Starburst Trino
 * Atlas
@@ -61,4 +67,3 @@ The Docker files in this folder create docker images and run them to build Apach
 This project is reusing most of the code of 
 * https://github.com/apache/atlas/tree/master/dev-support/atlas-docker
 * https://github.com/apache/ranger/tree/master/dev-support/ranger-docker
-

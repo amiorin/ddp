@@ -1,0 +1,16 @@
+version: '3'
+services:
+  ddp-solr:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-solr
+    image: ddp-solr
+    container_name: ddp-solr
+    hostname: ddp-solr.example.com
+    networks:
+      - ddp
+    ports:
+      - "8983:8983"
+
+networks:
+  ddp:

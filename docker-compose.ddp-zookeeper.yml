@@ -1,0 +1,16 @@
+version: '3'
+services:
+  ddp-zookeeper:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-zookeeper
+    image: ddp-zookeeper
+    container_name: ddp-zookeeper
+    hostname: ddp-zookeeper.example.com
+    networks:
+      - ddp
+    ports:
+      - "2181:2181"
+
+networks:
+  ddp:
