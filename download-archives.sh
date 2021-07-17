@@ -50,4 +50,4 @@ downloadIfNotPresent() {
 #downloadIfNotPresent hadoop-${HIVE_HADOOP_VERSION}.tar.gz       https://archive.apache.org/dist/hadoop/common/hadoop-${HIVE_HADOOP_VERSION}
 #downloadIfNotPresent postgresql-42.2.16.jre7.jar                https://search.maven.org/remotecontent?filepath=org/postgresql/postgresql/42.2.16.jre7
 downloadIfNotPresent zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb https://cdn.azul.com/zulu/bin
-
+downloadIfNotPresent starburst-enterprise-${STARBURST_VERSION}.tar.gz        https://s3.us-east-2.amazonaws.com/software.starburstdata.net/356e/${STARBURST_VERSION}

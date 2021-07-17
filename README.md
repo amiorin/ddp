@@ -24,21 +24,27 @@ The Docker files in this folder create docker images and run them to build Apach
 1. Ensure that you have recent version of Docker installed from [docker.io](http://www.docker.io) (as of this writing: Engine 20.10.5, Compose 1.28.5).
    Make sure to configure docker with at least 6gb of memory.
 
-2. Set this folder as your working directory.
+1. Set this folder as your working directory.
 
-3. Update environment variables in .env file, if necessary
+1. Update environment variables in .env file, if necessary
 
-4. Execute following command to download necessary archives to setup Atlas/Ranger/HDFS/Hive/HBase/Kafka/Starburst services:
+1. Request a trial license to Starburst https://www.starburst.io/
+
+1. Save the Starburst license in ```./downloads/starburstdata.license```
+
+1. Execute following command to download necessary archives to setup Atlas/Ranger/HDFS/Hive/HBase/Kafka/Starburst services:
      ./download-archives.sh
 
-5. Build and start Starburst Trino in containers using docker-compose
+1. Build and start Starburst Trino in containers using docker-compose
 
    5.1. Execute following command to start Starburst Trino:
 
         docker-compose -f docker-compose.ddp-base.yml -f docker-compose.ddp-starburst.yml up
 
-6. Starburst Trino can be accessed at https://localhost (ddp/ddpR0cks!).
+1. Starburst Trino can be accessed at https://localhost/ui (ddp/ddpR0cks!) or https://localhost/ui/insights
    Paste chrome://flags/#allow-insecure-localhost to fix the certificate problem.
+
+1. Starburst Trino cli ```trino-cli --server=https://localhost --insecure --password --user ddp``` (ddp/ddpR0cks!)
 
 ## Containers
 * Starburst Trino

@@ -52,6 +52,11 @@ insights.jdbc.url=jdbc:postgresql://ddp-postgres.example.com:5432/event_logger
 insights.jdbc.user=starburst_insights 
 insights.jdbc.password=ddpR0cks!
 insights.authorized-users=.*
+access-control.config-files=etc/access-control-1.properties
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/access-control-1.properties
+access-control.name=allow-all
 EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/event-logger.properties
