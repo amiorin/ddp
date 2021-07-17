@@ -18,12 +18,13 @@ FROM ddp-base:latest
 
 ARG STARBURST_VERSION
 
-COPY ./downloads/starburst-enterprise-${STARBURST_VERSION}.tar.gz     ${STARBURST_DIST}/
-COPY ./downloads/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb ${STARBURST_DIST}/
-COPY ./downloads/starburstdata.license                                ${STARBURST_DIST}/
+COPY ./downloads/starburst-enterprise-${STARBURST_VERSION}.tar.gz ${STARBURST_DIST}/
+COPY ./downloads/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb       ${STARBURST_DIST}/
+COPY ./downloads/starburstdata.license                            ${STARBURST_DIST}/
 
 COPY ./scripts/starburst/starburst-setup.sh  ${STARBURST_SCRIPTS}/
 COPY ./scripts/starburst/starburst.sh        ${STARBURST_SCRIPTS}/
+COPY ./scripts/starburst/keystore.jks        ${STARBURST_SCRIPTS}/
 
 RUN tar zxf /home/starburst/dist/starburst-enterprise-${STARBURST_VERSION}.tar.gz --directory=${STARBURST_HOME} --strip 1 && \
     rm -f /home/starburst/dist/starburst-enterprise-${STARBURST_VERSION}.tar.gz && \

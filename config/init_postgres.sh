@@ -17,11 +17,10 @@
 # limitations under the License.
 
 
-if [ ! -e ${STARBURST_HOME}/.setupDone ]
-then
-  touch ${STARBURST_HOME}/.setupDone
-  ${STARBURST_SCRIPTS}/starburst-setup.sh
-fi
+set -e
 
-# start 
-su starburst -c "cd ${STARBURST_HOME} && ./bin/launcher run"
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE USER starburst_insights WITH PASSWORD 'ddpR0cks!';
+    CREATE DATABASE event_logger;
+    GRANT ALL PRIVILEGES ON DATABASE event_logger TO starburst_insights;
+EOSQL
