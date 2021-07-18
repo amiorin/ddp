@@ -1,0 +1,203 @@
+version: '3'
+services:
+  ddp-atlas:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-atlas
+      args:
+        - ATLAS_VERSION=${ATLAS_VERSION}
+    image: ddp-atlas:latest
+    container_name: ddp-atlas
+    hostname: ddp-atlas.example.com
+    networks:
+      - ddp
+    volumes:
+      - ./data:/home/atlas/data
+    ports:
+      - "21000:21000"
+    depends_on:
+      ddp-hbase:
+        condition: service_started
+      ddp-kafka:
+        condition: service_started
+      ddp-solr:
+        condition: service_started
+      ddp-zookeeper:
+        condition: service_started
+    environment:
+      - ATLAS_VERSION
+    command:
+      - /home/atlas/scripts/atlas.sh
+  ddp-base:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-base
+    image: ddp-base
+    container_name: ddp-base
+    networks:
+      - ddp
+    environment:
+      - RANGER_VERSION
+      - ATLAS_VERSION
+      - STARBUST_VERSION
+  ddp-hadoop:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-hadoop
+      args:
+        - HADOOP_VERSION=${HADOOP_VERSION}
+    image: ddp-hadoop
+    container_name: ddp-hadoop
+    hostname: ddp-hadoop.example.com
+    networks:
+      - ddp
+    ports:
+      - "9000:9000"
+      - "8088:8088"
+      - "9870:9870"
+    depends_on:
+      - ddp-base
+    healthcheck:
+      test: "hdfs dfs -ls /"
+      interval: 1m30s
+      timeout: 10s
+      retries: 30
+      start_period: 40s
+    environment:
+      - HADOOP_VERSION
+  ddp-hbase:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-hbase
+      args:
+        - HBASE_VERSION=${HBASE_VERSION}
+        - ATLAS_VERSION=${ATLAS_VERSION}
+    image: ddp-hbase
+    container_name: ddp-hbase
+    hostname: ddp-hbase.example.com
+    networks:
+      - ddp
+    ports:
+      - "16000:16000"
+      - "16010:16010"
+      - "16020:16020"
+      - "16030:16030"
+    depends_on:
+      ddp-hadoop:
+        condition: service_healthy
+      ddp-zookeeper:
+        condition: service_started
+      ddp-kafka:
+        condition: service_started
+    environment:
+      - HBASE_VERSION
+      - ATLAS_VERSION
+  ddp-hive:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-hive
+      args:
+        - HIVE_HADOOP_VERSION=${HIVE_HADOOP_VERSION}
+        - HIVE_VERSION=${HIVE_VERSION}
+        - ATLAS_VERSION=${ATLAS_VERSION}
+    image: ddp-hive
+    container_name: ddp-hive
+    hostname: ddp-hive.example.com
+    networks:
+      - ddp
+    ports:
+      - "9083:9083"
+      - "10000:10000"
+      - "10002:10002"
+    depends_on:
+      ddp-postgres:
+        condition: service_started
+      ddp-hadoop:
+        condition: service_healthy
+      ddp-zookeeper:
+        condition: service_started
+      ddp-kafka:
+        condition: service_started
+    environment:
+      - HIVE_HADOOP_VERSION
+      - HIVE_VERSION
+      - ATLAS_VERSION
+  ddp-kafka:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-kafka
+      args:
+        - KAFKA_VERSION=${KAFKA_VERSION}
+    image: ddp-kafka
+    container_name: ddp-kafka
+    hostname: ddp-kafka.example.com
+    networks:
+      - ddp
+    ports:
+      - "9092:9092"
+    depends_on:
+      ddp-zookeeper:
+        condition: service_started
+    environment:
+      - KAFKA_VERSION
+  ddp-postgres:
+    build:
+        context: .
+        dockerfile: Dockerfile.ddp-postgres
+    image: ddp-postgres
+    container_name: ddp-postgres
+    hostname: ddp-postgres.example.com
+    networks:
+        - ddp
+    ports:
+      - "5432:5432"
+  ddp-solr:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-solr
+    image: ddp-solr
+    container_name: ddp-solr
+    hostname: ddp-solr.example.com
+    networks:
+      - ddp
+    ports:
+      - "8983:8983"
+    logging:
+      driver: none
+  ddp-starburst:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-starburst
+      args:
+        - STARBURST_VERSION=${STARBURST_VERSION}
+    image: ddp-starburst:latest
+    container_name: ddp-starburst
+    hostname: ddp-starburst.example.com
+    restart: always
+    depends_on:
+      - ddp-base
+    networks:
+      - ddp
+    environment:
+    - STARBURST_VERSION
+    ports:
+      - "443:443"
+    depends_on:
+      ddp-kafka:
+        condition: service_started
+      ddp-hive:
+        condition: service_started
+  ddp-zookeeper:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-zookeeper
+    image: ddp-zookeeper
+    container_name: ddp-zookeeper
+    hostname: ddp-zookeeper.example.com
+    networks:
+      - ddp
+    ports:
+      - "2181:2181"
+
+networks:
+  ddp:

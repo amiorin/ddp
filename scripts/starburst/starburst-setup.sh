@@ -126,7 +126,7 @@ cat <<EOF > ${STARBURST_HOME}/etc/core-site.xml
 </configuration>
 EOF
 
-cat <<EOF > ${STARBURST_HOME}/etc/hadoop/hdfs-site.xml
+cat <<EOF > ${STARBURST_HOME}/etc/hdfs-site.xml
 <configuration>
   <property>
     <name>dfs.replication</name>

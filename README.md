@@ -39,7 +39,7 @@ The Docker files in this folder create docker images and run them to build Apach
 
    1. Execute following command to start Starburst Trino:
 
-          docker-compose -f docker-compose.ddp-base.yml up && docker-compose -f docker-compose.ddp-base.yml -f docker-compose.ddp-hadoop.yml -f docker-compose.ddp-solr.yml -f docker-compose.ddp-starburst.yml -f docker-compose.ddp-zookeeper.yml -f docker-compose.ddp-kafka.yml -f docker-compose.ddp-hive.yml -f docker-compose.ddp-hbase.yml -f docker-compose.ddp-atlas.yml -f docker-compose.ddp-postgres.yml up
+          docker-compose up
 
 1. Starburst Trino can be accessed at https://localhost/ui (ddp/ddpR0cks!) or https://localhost/ui/insights
    Paste chrome://flags/#allow-insecure-localhost to fix the certificate problem.
