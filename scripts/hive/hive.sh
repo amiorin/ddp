@@ -24,6 +24,10 @@ then
   ${HIVE_SCRIPTS}/hive-setup.sh
 fi
 
-su -c "${HIVE_HOME}/bin/hive --service hiveserver2 &" hive
+su -c "${HIVE_HOME}/bin/hive --service metastore &" hive
+while ! nc -z localhost 9083; do   
+  sleep 0.1
+done
 
-su -c "${HIVE_HOME}/bin/hive --service metastore" hive
+su -c "${HIVE_HOME}/bin/hive --service hiveserver2 &" hive
+tail --pid=$$ -f /dev/null
