@@ -21,9 +21,9 @@ ARG HIVE_HADOOP_VERSION
 ARG ATLAS_VERSION
 ENV HIVE_SCRIPTS /home/hive/scripts
 
-COPY ./dist/apache-atlas-${ATLAS_VERSION}-hive-hook.tar.gz /home/hive/dist/
-COPY ./downloads/apache-hive-${HIVE_VERSION}-bin.tar.gz    /home/hive/dist/
-COPY ./downloads/hadoop-${HIVE_HADOOP_VERSION}.tar.gz      /home/hive/dist/
+COPY ./dist/atlas/apache-atlas-${ATLAS_VERSION}-hive-hook.tar.gz /home/hive/dist/
+COPY ./downloads/apache-hive-${HIVE_VERSION}-bin.tar.gz          /home/hive/dist/
+COPY ./downloads/hadoop-${HIVE_HADOOP_VERSION}.tar.gz            /home/hive/dist/
 
 COPY ./scripts/hive/hive-setup.sh               ${HIVE_SCRIPTS}/
 COPY ./scripts/hive/hive.sh                     ${HIVE_SCRIPTS}/
@@ -32,7 +32,7 @@ COPY ./scripts/hive/hive-site.xml               ${HIVE_SCRIPTS}/
 
 RUN mkdir /opt/hive && \
     tar xfz /home/hive/dist/apache-hive-${HIVE_VERSION}-bin.tar.gz --directory=/opt/hive --strip 1 && \
-    rm -f /home/dist/dist/apache-hive-${HIVE_VERSION}-bin.tar.gz && \
+    rm -f /home/hive/dist/apache-hive-${HIVE_VERSION}-bin.tar.gz && \
     mkdir /opt/hadoop && \
     tar xfz /home/hive/dist/hadoop-${HIVE_HADOOP_VERSION}.tar.gz --directory=/opt/hadoop --strip 1 && \
     rm -f /home/hive/dist/hadoop-${HIVE_HADOOP_VERSION}.tar.gz && \

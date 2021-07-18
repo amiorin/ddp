@@ -18,8 +18,8 @@ FROM ddp-base:latest
 
 ARG ATLAS_VERSION
 
-COPY ./scripts/atlas/atlas.sh                           ${ATLAS_SCRIPTS}/
-COPY ./dist/apache-atlas-${ATLAS_VERSION}-server.tar.gz /home/atlas/dist/
+COPY ./scripts/atlas/atlas.sh                                 ${ATLAS_SCRIPTS}/
+COPY ./dist/atlas/apache-atlas-${ATLAS_VERSION}-server.tar.gz /home/atlas/dist/
 
 RUN tar xfz /home/atlas/dist/apache-atlas-${ATLAS_VERSION}-server.tar.gz --directory=${ATLAS_HOME}/ --strip 1 && \
     rm -f /home/atlas/dist/apache-atlas-${ATLAS_VERSION}-server.tar.gz && \

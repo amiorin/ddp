@@ -21,8 +21,8 @@ ARG HBASE_VERSION
 ENV HBASE_SCRIPTS /home/hbase/scripts
 ENV HBASE_MANAGES_ZK false
 
-COPY ./dist/apache-atlas-${ATLAS_VERSION}-hbase-hook.tar.gz /home/hbase/dist/
-COPY ./downloads/hbase-${HBASE_VERSION}-bin.tar.gz          /home/hbase/dist/
+COPY ./dist/atlas/apache-atlas-${ATLAS_VERSION}-hbase-hook.tar.gz /home/hbase/dist/
+COPY ./downloads/hbase-${HBASE_VERSION}-bin.tar.gz                /home/hbase/dist/
 
 COPY ./scripts/hbase/hbase-setup.sh               ${HBASE_SCRIPTS}/
 COPY ./scripts/hbase/hbase.sh                     ${HBASE_SCRIPTS}/
