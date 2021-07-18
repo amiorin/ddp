@@ -18,12 +18,10 @@
 
 set -xe
 
-# setup directories for HBase
-${HADOOP_HOME}/bin/hdfs dfs -mkdir /hbase
-${HADOOP_HOME}/bin/hdfs dfs -chown hbase:hadoop /hbase
+if [ ! -e ${KAFKA_HOME}/.setupDone ]
+then
+  touch ${KAFKA_HOME}/.setupDone
+  ${KAFKA_SCRIPTS}/kafka-setup.sh
+fi
 
-# setup directories for Hive
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/hive/warehouse
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /tmp/hive
-${HADOOP_HOME}/bin/hdfs dfs -chown -R hive:hadoop /tmp/hive /user/hive
-${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp/hive
+su -c "cd ${KAFKA_HOME} && CLASSPATH=${KAFKA_HOME}/config ./bin/kafka-server-start.sh config/server.properties" kafka

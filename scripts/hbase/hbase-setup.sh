@@ -18,12 +18,6 @@
 
 set -xe
 
-# setup directories for HBase
-${HADOOP_HOME}/bin/hdfs dfs -mkdir /hbase
-${HADOOP_HOME}/bin/hdfs dfs -chown hbase:hadoop /hbase
+echo "export JAVA_HOME=${JAVA_HOME}" >> ${HBASE_HOME}/conf/hbase-env.sh
 
-# setup directories for Hive
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/hive/warehouse
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /tmp/hive
-${HADOOP_HOME}/bin/hdfs dfs -chown -R hive:hadoop /tmp/hive /user/hive
-${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp/hive
+chown -R hbase:hadoop /opt/hbase/

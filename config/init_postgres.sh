@@ -23,4 +23,8 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     CREATE USER starburst_insights WITH PASSWORD 'ddpR0cks!';
     CREATE DATABASE event_logger;
     GRANT ALL PRIVILEGES ON DATABASE event_logger TO starburst_insights;
+
+    CREATE USER hive WITH PASSWORD 'ddpR0cks!';
+    CREATE DATABASE hive;
+    GRANT ALL PRIVILEGES ON DATABASE hive TO hive;
 EOSQL

@@ -18,12 +18,6 @@
 
 set -xe
 
-# setup directories for HBase
-${HADOOP_HOME}/bin/hdfs dfs -mkdir /hbase
-${HADOOP_HOME}/bin/hdfs dfs -chown hbase:hadoop /hbase
+sed -i 's/localhost:2181/ddp-zookeeper.example.com:2181/' /opt/kafka/config/server.properties
 
-# setup directories for Hive
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/hive/warehouse
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /tmp/hive
-${HADOOP_HOME}/bin/hdfs dfs -chown -R hive:hadoop /tmp/hive /user/hive
-${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp/hive
+chown -R kafka:hadoop /opt/kafka/

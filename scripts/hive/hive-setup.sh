@@ -18,12 +18,21 @@
 
 set -xe
 
-# setup directories for HBase
-${HADOOP_HOME}/bin/hdfs dfs -mkdir /hbase
-${HADOOP_HOME}/bin/hdfs dfs -chown hbase:hadoop /hbase
+echo "export JAVA_HOME=${JAVA_HOME}" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh
 
-# setup directories for Hive
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/hive/warehouse
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /tmp/hive
-${HADOOP_HOME}/bin/hdfs dfs -chown -R hive:hadoop /tmp/hive /user/hive
-${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp/hive
+cat <<EOF > ${HADOOP_HOME}/etc/hadoop/core-site.xml
+<configuration>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://ddp-hadoop.example.com:9000</value>
+  </property>
+</configuration>
+EOF
+
+cp ${HIVE_SCRIPTS}/hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
+cp ${HIVE_SCRIPTS}/hive-site.xml ${HIVE_HOME}/conf/hiveserver2-site.xml
+su -c "${HIVE_HOME}/bin/schematool -dbType postgres -initSchema" hive
+
+mkdir -p /opt/hive/logs
+chown -R hive:hadoop /opt/hive/
+chmod g+w /opt/hive/logs

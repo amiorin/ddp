@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -xe
+
 mkdir -p /etc/sep/catalog
 cd ${STARBURST_HOME} && ln -s /etc/sep etc
 

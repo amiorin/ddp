@@ -18,12 +18,15 @@
 
 set -xe
 
-# setup directories for HBase
-${HADOOP_HOME}/bin/hdfs dfs -mkdir /hbase
-${HADOOP_HOME}/bin/hdfs dfs -chown hbase:hadoop /hbase
+if [ ! -e ${HBASE_HOME}/.setupDone ]
+then
+  touch ${HBASE_HOME}/.setupDone
+  ${HBASE_SCRIPTS}/hbase-setup.sh
+fi
 
-# setup directories for Hive
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/hive/warehouse
-${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /tmp/hive
-${HADOOP_HOME}/bin/hdfs dfs -chown -R hive:hadoop /tmp/hive /user/hive
-${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp/hive
+su -c "${HBASE_HOME}/bin/start-hbase.sh" hbase
+
+HBASE_MASTER_PID=`ps -ef  | grep -v grep | grep -i "org.apache.hadoop.hbase.master.HMaster" | awk '{print $2}'`
+
+# prevent the container from exiting
+tail --pid=$HBASE_MASTER_PID -f /dev/null

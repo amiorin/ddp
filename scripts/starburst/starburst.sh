@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -xe
 
 if [ ! -e ${STARBURST_HOME}/.setupDone ]
 then

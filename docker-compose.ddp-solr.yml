@@ -11,6 +11,8 @@ services:
       - ddp
     ports:
       - "8983:8983"
+    logging:
+      driver: none
 
 networks:
   ddp:

@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -xe
+
 service ssh start
 
 CREATE_HDFS_DIR=false

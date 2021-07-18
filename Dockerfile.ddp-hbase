@@ -1,0 +1,52 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM ddp-base:latest
+
+ARG ATLAS_VERSION
+ARG HBASE_VERSION
+ENV HBASE_SCRIPTS /home/hbase/scripts
+ENV HBASE_MANAGES_ZK false
+
+COPY ./dist/apache-atlas-${ATLAS_VERSION}-hbase-hook.tar.gz /home/hbase/dist/
+COPY ./downloads/hbase-${HBASE_VERSION}-bin.tar.gz          /home/hbase/dist/
+
+COPY ./scripts/hbase/hbase-setup.sh               ${HBASE_SCRIPTS}/
+COPY ./scripts/hbase/hbase.sh                     ${HBASE_SCRIPTS}/
+COPY ./scripts/hbase/hbase-site.xml               ${HBASE_SCRIPTS}/
+COPY ./scripts/hbase/hbase-application.properties ${HBASE_SCRIPTS}/
+
+RUN mkdir /opt/hbase && \
+    tar xfz /home/hbase/dist/hbase-${HBASE_VERSION}-bin.tar.gz --directory=/opt/hbase/ --strip 1 && \
+    rm -f /home/hbase/dist/hbase-${HBASE_VERSION}-bin.tar.gz && \
+    mkdir /opt/apache-atlas-hbase-hook && \
+    tar xfz /home/hbase/dist/apache-atlas-${ATLAS_VERSION}-hbase-hook.tar.gz --directory=/opt/apache-atlas-hbase-hook --strip 1 && \
+    rm -f /home/hbase/dist/apache-atlas-${ATLAS_VERSION}-hbase-hook.tar.gz && \
+    ln -s /opt/apache-atlas-hbase-hook/hook/hbase/atlas-plugin-classloader-${ATLAS_VERSION}.jar /opt/hbase/lib/ && \
+    ln -s /opt/apache-atlas-hbase-hook/hook/hbase/hbase-bridge-shim-${ATLAS_VERSION}.jar /opt/hbase/lib/ && \
+    ln -s /opt/apache-atlas-hbase-hook/hook/hbase/atlas-hbase-plugin-impl /opt/hbase/lib/atlas-hbase-plugin-impl && \
+    cp /home/hbase/scripts/hbase-site.xml /opt/hbase/conf/hbase-site.xml && \
+    cp -f /home/hbase/scripts/hbase-application.properties /opt/hbase/conf/atlas-application.properties
+
+ENV HBASE_HOME /opt/hbase
+ENV PATH       /usr/java/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/hbase/bin
+
+EXPOSE 16000
+EXPOSE 16010
+EXPOSE 16020
+EXPOSE 16030
+
+ENTRYPOINT [ "/home/hbase/scripts/hbase.sh" ]
