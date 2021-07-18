@@ -1,0 +1,44 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM ddp-base:latest
+
+ARG RANGER_VERSION
+ARG STARBURST_VERSION
+
+COPY ./dist/ranger/ranger-${RANGER_VERSION}-admin.tar.gz                  ${RANGER_DIST}/
+COPY ./downloads/postgresql-42.2.16.jre7.jar                              ${RANGER_DIST}/
+COPY ./downloads/starburst-ranger-plugin-2.0.51.jar                       ${RANGER_DIST}/starburst-ranger-plugin.jar
+COPY ./downloads/trino-jdbc-${STARBURST_VERSION}.jar                      ${RANGER_DIST}/trino-jdbc.jar
+
+COPY ./scripts/ranger/ranger.sh                       ${RANGER_SCRIPTS}/
+COPY ./scripts/ranger/ranger-setup.sh                 ${RANGER_SCRIPTS}/
+COPY ./scripts/ranger/ranger-admin-install.properties ${RANGER_SCRIPTS}/
+COPY ./scripts/ranger/ranger-hive-service-dev_hive.py ${RANGER_SCRIPTS}/
+
+RUN mkdir -p ${RANGER_HOME}/admin && \
+    tar xfz /home/ranger/dist/ranger-${RANGER_VERSION}-admin.tar.gz --directory=${RANGER_HOME}/admin --strip 1 && \
+    rm -f /home/ranger/dist/ranger-${RANGER_VERSION}-admin.tar.gz && \
+    mv ${RANGER_SCRIPTS}/ranger-admin-install.properties ${RANGER_HOME}/admin/install.properties && \
+    mv ${RANGER_DIST}/starburst-ranger-plugin.jar ${RANGER_HOME}/admin/ews/webapp/WEB-INF/lib/ && \
+    mv ${RANGER_DIST}/trino-jdbc.jar ${RANGER_HOME}/admin/ews/webapp/WEB-INF/lib/ && \
+    mkdir -p /var/run/ranger && \
+    mkdir -p /var/log/ranger && \
+    chown -R ranger:ranger ${RANGER_HOME}/admin/ /var/run/ranger/ /var/log/ranger/ && \
+    mkdir -p /usr/share/java/ && \
+    mv /home/ranger/dist/postgresql-42.2.16.jre7.jar /usr/share/java/postgresql.jar
+
+ENTRYPOINT [ "/home/ranger/scripts/ranger.sh" ]

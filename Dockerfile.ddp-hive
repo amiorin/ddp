@@ -19,16 +19,19 @@ FROM ddp-base:latest
 ARG HIVE_VERSION
 ARG HIVE_HADOOP_VERSION
 ARG ATLAS_VERSION
+ARG RANGER_VERSION
 ENV HIVE_SCRIPTS /home/hive/scripts
 
 COPY ./dist/atlas/apache-atlas-${ATLAS_VERSION}-hive-hook.tar.gz /home/hive/dist/
+COPY ./dist/ranger/ranger-${RANGER_VERSION}-hive-plugin.tar.gz   /home/hive/dist/
 COPY ./downloads/apache-hive-${HIVE_VERSION}-bin.tar.gz          /home/hive/dist/
 COPY ./downloads/hadoop-${HIVE_HADOOP_VERSION}.tar.gz            /home/hive/dist/
 
-COPY ./scripts/hive/hive-setup.sh               ${HIVE_SCRIPTS}/
-COPY ./scripts/hive/hive.sh                     ${HIVE_SCRIPTS}/
-COPY ./scripts/hive/hive-application.properties ${HIVE_SCRIPTS}/
-COPY ./scripts/hive/hive-site.xml               ${HIVE_SCRIPTS}/
+COPY ./scripts/hive/hive-application.properties      ${HIVE_SCRIPTS}/
+COPY ./scripts/hive/hive-plugin-install.properties   ${HIVE_SCRIPTS}/
+COPY ./scripts/hive/hive-setup.sh                    ${HIVE_SCRIPTS}/
+COPY ./scripts/hive/hive-site.xml                    ${HIVE_SCRIPTS}/
+COPY ./scripts/hive/hive.sh                          ${HIVE_SCRIPTS}/
 
 RUN mkdir /opt/hive && \
     tar xfz /home/hive/dist/apache-hive-${HIVE_VERSION}-bin.tar.gz --directory=/opt/hive --strip 1 && \
@@ -43,7 +46,11 @@ RUN mkdir /opt/hive && \
     ln -s /opt/apache-atlas-hive-hook/hook/hive/hive-bridge-shim-${ATLAS_VERSION}.jar /opt/hive/lib/ && \
     ln -s /opt/apache-atlas-hive-hook/hook/hive/atlas-hive-plugin-impl /opt/hive/lib/atlas-hive-plugin-impl && \
     cp -f /home/hive/scripts/hive-site.xml /opt/hive/conf/hive-site.xml && \
-    cp -f /home/hive/scripts/hive-application.properties /opt/hive/conf/atlas-application.properties
+    cp -f /home/hive/scripts/hive-application.properties /opt/hive/conf/atlas-application.properties && \
+    mkdir -p /opt/ranger/ranger-hive-plugin && \
+    tar xfz /home/hive/dist/ranger-${RANGER_VERSION}-hive-plugin.tar.gz --directory=/opt/ranger/ranger-hive-plugin --strip 1 && \
+    rm -f /home/hive/dist/ranger-${RANGER_VERSION}-hive-plugin.tar.gz && \
+    cp -f /home/hive/scripts/hive-plugin-install.properties /opt/ranger/ranger-hive-plugin/install.properties
 
 ENV HIVE_HOME   /opt/hive
 ENV HADOOP_HOME /opt/hadoop

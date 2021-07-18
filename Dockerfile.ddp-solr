@@ -24,6 +24,11 @@ COPY ./config/solr/*.*       /opt/solr/server/solr/configsets/atlas/conf/
 COPY ./config/solr/lang/*.* /opt/solr/server/solr/configsets/atlas/conf/lang/
 RUN chown -R solr:solr /opt/solr/server/solr/configsets/atlas/
 
+# Copy Ranger collections config set
+RUN  mkdir -p /opt/solr/server/solr/configsets/ranger_audits/conf
+COPY config/solr-ranger_audits/* /opt/solr/server/solr/configsets/ranger_audits/conf/
+RUN chown -R solr:solr /opt/solr/server/solr/configsets/ranger_audits/
+
 # Copy script that creates Atlas collections
 COPY ./scripts/solr/ddp-solr-create.sh /docker-entrypoint-initdb.d/
 

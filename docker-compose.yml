@@ -1,5 +1,29 @@
 version: '3'
 services:
+  ddp-ranger:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-ranger
+      args:
+        - RANGER_VERSION=${RANGER_VERSION}
+        - STARBURST_VERSION=${STARBURST_VERSION}
+    image: ddp-ranger:latest
+    container_name: ddp-ranger
+    hostname: ddp-ranger.example.com
+    networks:
+      - ddp
+    ports:
+      - "6080:6080"
+    depends_on:
+      ddp-zookeeper:
+        condition: service_started
+      ddp-postgres:
+        condition: service_started
+      ddp-solr:
+        condition: service_started
+    environment:
+      - RANGER_VERSION
+      - STARBURST_VERSION
   ddp-atlas:
     build:
       context: .
@@ -100,6 +124,7 @@ services:
         - HIVE_HADOOP_VERSION=${HIVE_HADOOP_VERSION}
         - HIVE_VERSION=${HIVE_VERSION}
         - ATLAS_VERSION=${ATLAS_VERSION}
+        - RANGER_VERSION=${RANGER_VERSION}
     image: ddp-hive
     container_name: ddp-hive
     hostname: ddp-hive.example.com
@@ -122,6 +147,7 @@ services:
       - HIVE_HADOOP_VERSION
       - HIVE_VERSION
       - ATLAS_VERSION
+      - RANGER_VERSION
   ddp-kafka:
     build:
       context: .
@@ -182,10 +208,13 @@ services:
     - STARBURST_VERSION
     ports:
       - "443:443"
+      - "8080:8080"
     depends_on:
       ddp-kafka:
         condition: service_started
       ddp-hive:
+        condition: service_started
+      ddp-ranger:
         condition: service_started
   ddp-zookeeper:
     build:

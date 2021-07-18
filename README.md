@@ -49,15 +49,35 @@ The Docker files in this folder create docker images and run them to build Apach
 ## Web
 * Starburst https://localhost/ui
 * Starburst https://localhost/ui/insights
+* Starburst http://localhost:8080/ui
+* Starburst http://localhost:8080/ui/insights
 * Namenode http://localhost:9870
 * Resource Manager http://localhost:8088
 * HBase http://localhost:16010
 * Atlas http://localhost:21000
 * Hive http://localhost:10002
+* Ranger http://localhost:6080
 
-## Test
+## Misc
 ```sql
 create table hive.default.item as select * from tpcds.tiny.item
+```
+
+```sh
+bin/kafka-topics.sh --list --bootstrap-server ddp-kafka.example.com:9092
+bin/kafka-console-consumer.sh --topic ATLAS_HOOK --from-beginning --bootstrap-server ddp-kafka.example.com:9092 | jq .
+bin/kafka-console-consumer.sh --topic ATLAS_ENTITIES --from-beginning --bootstrap-server ddp-kafka.example.com:9092 | jq .
+```
+
+```sh
+# Fast container rebuild
+docker-compose up -d
+docker-compose logs -f
+# rebuild ddp-starburst only
+docker-compose stop ddp-starburst
+docker-compose build --no-cache ddp-starburst
+docker-compose up -d --no-deps
+docker-compose logs -f ddp-starburst
 ```
 
 ## Containers

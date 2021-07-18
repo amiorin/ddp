@@ -18,9 +18,10 @@ FROM ddp-base:latest
 
 ARG STARBURST_VERSION
 
-COPY ./downloads/starburst-enterprise-${STARBURST_VERSION}.tar.gz ${STARBURST_DIST}/
-COPY ./downloads/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb       ${STARBURST_DIST}/
-COPY ./downloads/starburstdata.license                            ${STARBURST_DIST}/
+COPY ./downloads/starburst-enterprise-${STARBURST_VERSION}.tar.gz         ${STARBURST_DIST}/
+COPY ./downloads/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb               ${STARBURST_DIST}/
+COPY ./downloads/starburstdata.license                                    ${STARBURST_DIST}/
+COPY ./downloads/starburst-ranger-cli-${STARBURST_VERSION}-executable.jar /usr/local/bin/starburst-ranger-cli
 
 COPY ./scripts/starburst/starburst-setup.sh  ${STARBURST_SCRIPTS}/
 COPY ./scripts/starburst/starburst.sh        ${STARBURST_SCRIPTS}/

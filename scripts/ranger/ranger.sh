@@ -16,19 +16,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -xe
 
-set -e
+if [ ! -e ${RANGER_HOME}/.setupDone ]
+then
+  SETUP_RANGER=true
+else
+  SETUP_RANGER=false
+fi
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
-    CREATE USER starburst_insights WITH PASSWORD 'ddpR0cks!';
-    CREATE DATABASE event_logger;
-    GRANT ALL PRIVILEGES ON DATABASE event_logger TO starburst_insights;
+if [ "${SETUP_RANGER}" == "true" ]
+then
+  su -c "cd ${RANGER_HOME}/admin && ./setup.sh" ranger
 
-    CREATE USER hive WITH PASSWORD 'ddpR0cks!';
-    CREATE DATABASE hive;
-    GRANT ALL PRIVILEGES ON DATABASE hive TO hive;
+  touch ${RANGER_HOME}/.setupDone
+fi
 
-    CREATE USER rangeradmin WITH PASSWORD 'ddpR0cks!';
-    CREATE DATABASE ranger;
-    GRANT ALL PRIVILEGES ON DATABASE ranger TO rangeradmin;
-EOSQL
+su -c "cd ${RANGER_HOME}/admin && ./ews/ranger-admin-services.sh start" ranger
+
+if [ "${SETUP_RANGER}" == "true" ]
+then
+  # Wait for Ranger Admin to become ready
+  sleep 30
+
+  python3 ${RANGER_SCRIPTS}/ranger-hive-service-dev_hive.py
+  ${RANGER_SCRIPTS}/ranger-setup.sh
+fi
+
+RANGER_ADMIN_PID=`ps -ef  | grep -v grep | grep -i "org.apache.ranger.server.tomcat.EmbeddedServer" | awk '{print $2}'`
+
+# prevent the container from exiting
+tail --pid=$RANGER_ADMIN_PID -f /dev/null
