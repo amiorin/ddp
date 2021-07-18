@@ -14,7 +14,9 @@ services:
     networks:
       - ddp
     ports:
+      - "9083:9083"
       - "10000:10000"
+      - "10002:10002"
     depends_on:
       ddp-postgres:
         condition: service_started

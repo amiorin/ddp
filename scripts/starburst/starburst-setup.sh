@@ -47,7 +47,7 @@ internal-communication.shared-secret=NjqD4JuanYnfMCgpKwdwQP8zCMVWPA8mu9kU+C6A7++
 query.max-memory=5GB
 query.max-memory-per-node=1GB
 query.max-total-memory-per-node=2GB
-event-listener.config-files=etc/event-logger.properties
+event-listener.config-files=etc/event-logger.properties,etc/atlas-logger.properties
 insights.persistence-enabled=true
 insights.metrics-persistence-enabled=true
 insights.jdbc.url=jdbc:postgresql://ddp-postgres.example.com:5432/event_logger
@@ -55,6 +55,15 @@ insights.jdbc.user=starburst_insights
 insights.jdbc.password=ddpR0cks!
 insights.authorized-users=.*
 access-control.config-files=etc/access-control-1.properties
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/atlas-logger.properties
+event-listener.name=starburst-atlas
+atlas.cluster.name=starburst
+atlas.kafka.bootstrap.servers=ddp-kafka.example.com:9092
+atlas.server.url=http://ddp-atlas.example.com:21000
+atlas.username=admin
+atlas.password=atlasR0cks!
 EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/access-control-1.properties
@@ -88,6 +97,7 @@ cat <<EOF > ${STARBURST_HOME}/etc/jvm.config
 -XX:PerBytecodeRecompilationCutoff=10000
 -Djdk.attach.allowAttachSelf=true
 -Djdk.nio.maxCachedBufferSize=2000000
+-DHADOOP_USER_NAME=hive
 EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/node.properties
@@ -97,6 +107,32 @@ EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/tpcds.properties
 connector.name=tpcds
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/hive.properties
+connector.name=tpcds
+connector.name=hive-hadoop2
+hive.metastore.uri=thrift://ddp-hive.example.com:9083
+hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
+hive.security=allow-all
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/core-site.xml
+<configuration>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://ddp-hadoop.example.com:9000</value>
+  </property>
+</configuration>
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/hadoop/hdfs-site.xml
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+  </property>
+</configuration>
 EOF
 
 chown -R starburst:starburst ${STARBURST_HOME}/

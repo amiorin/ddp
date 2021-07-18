@@ -1,6 +1,6 @@
 version: '3'
 services:
-  starburst:
+  ddp-starburst:
     build:
       context: .
       dockerfile: Dockerfile.ddp-starburst
@@ -18,18 +18,11 @@ services:
     - STARBURST_VERSION
     ports:
       - "443:443"
-
-  ddp-postgres:
-    build:
-        context: .
-        dockerfile: Dockerfile.ddp-postgres
-    image: ddp-postgres
-    container_name: ddp-postgres
-    hostname: ddp-postgres.example.com
-    networks:
-        - ddp
-    ports:
-      - "5432:5432"
+    depends_on:
+      ddp-kafka:
+        condition: service_started
+      ddp-hive:
+        condition: service_started
 
 networks:
   ddp:

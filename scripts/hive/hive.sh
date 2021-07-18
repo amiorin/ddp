@@ -24,9 +24,6 @@ then
   ${HIVE_SCRIPTS}/hive-setup.sh
 fi
 
-su -c "${HIVE_HOME}/bin/hiveserver2" hive
+su -c "${HIVE_HOME}/bin/hive --service hiveserver2 &" hive
 
-HIVESERVER2_PID=`ps -ef  | grep -v grep | grep -i "org.apache.hive.service.server.HiveServer2" | awk '{print $2}'`
-
-# prevent the container from exiting
-tail --pid=$HIVESERVER2_PID -f /dev/null
+su -c "${HIVE_HOME}/bin/hive --service metastore" hive

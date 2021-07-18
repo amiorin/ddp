@@ -26,4 +26,4 @@ ${HADOOP_HOME}/bin/hdfs dfs -chown hbase:hadoop /hbase
 ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /user/hive/warehouse
 ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /tmp/hive
 ${HADOOP_HOME}/bin/hdfs dfs -chown -R hive:hadoop /tmp/hive /user/hive
-${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp/hive
+${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp

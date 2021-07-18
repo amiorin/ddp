@@ -31,7 +31,7 @@ EOF
 
 cp ${HIVE_SCRIPTS}/hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
 cp ${HIVE_SCRIPTS}/hive-site.xml ${HIVE_HOME}/conf/hiveserver2-site.xml
-su -c "${HIVE_HOME}/bin/schematool -dbType postgres -initSchema" hive
+su -c "${HIVE_HOME}/bin/schematool -dbType postgres -initSchema" hive || true
 
 mkdir -p /opt/hive/logs
 chown -R hive:hadoop /opt/hive/
