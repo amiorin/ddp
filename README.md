@@ -55,6 +55,11 @@ The Docker files in this folder create docker images and run them to build Apach
 * Atlas http://localhost:21000
 * Hive http://localhost:10002
 
+## Test
+```sql
+create table hive.default.item as select * from tpcds.tiny.item
+```
+
 ## Containers
 * Starburst Trino
 * Atlas

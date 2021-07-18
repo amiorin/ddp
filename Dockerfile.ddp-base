@@ -20,7 +20,8 @@ FROM ubuntu:20.04
 # Install tzdata, Python, Java
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata \
-    python python3 python3-pip openjdk-8-jdk apache2-utils jq vim bc netcat net-tools iputils-ping ssh pdsh && \
+    python python3 python3-pip openjdk-8-jdk bc iputils-ping ssh pdsh \
+    apache2-utils jq vim netcat net-tools iproute2 lsof less && \
     pip3 install apache-atlas && \
     pip3 install apache-ranger && \
     pip3 install requests

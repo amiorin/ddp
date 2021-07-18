@@ -26,7 +26,7 @@ fi
 
 su -c "${HIVE_HOME}/bin/hive --service metastore &" hive
 while ! nc -z localhost 9083; do   
-  sleep 0.1
+  sleep 1
 done
 
 su -c "${HIVE_HOME}/bin/hive --service hiveserver2 &" hive
