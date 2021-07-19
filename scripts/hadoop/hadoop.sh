@@ -53,4 +53,4 @@ fi
 NAMENODE_PID=`ps -ef  | grep -v grep | grep -i "org.apache.hadoop.hdfs.server.namenode.NameNode" | awk '{print $2}'`
 
 # prevent the container from exiting
-tail --pid=$NAMENODE_PID -f /dev/null
+tail --pid=$NAMENODE_PID -f /opt/hadoop/logs/hadoop-hdfs-namenode-ddp-hadoop.example.com.log

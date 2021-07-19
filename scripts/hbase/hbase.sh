@@ -29,4 +29,4 @@ su -c "${HBASE_HOME}/bin/start-hbase.sh" hbase
 HBASE_MASTER_PID=`ps -ef  | grep -v grep | grep -i "org.apache.hadoop.hbase.master.HMaster" | awk '{print $2}'`
 
 # prevent the container from exiting
-tail --pid=$HBASE_MASTER_PID -f /dev/null
+tail --pid=$HBASE_MASTER_PID -f /opt/hbase/logs/hbase-hbase-master-ddp-hbase.example.com.log

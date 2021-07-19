@@ -73,8 +73,14 @@ ranger.password=ddpR0cks!
 ranger.policy-refresh-interval=30s
 EOF
 
+while ! nc -z ddp-ranger.example.com 6080; do   
+  sleep 1
+done
+
 starburst-ranger-cli service-definition starburst create \
   --properties=${STARBURST_HOME}/etc/access-control-ranger.properties || true
+
+python3 ${STARBURST_SCRIPTS}/ranger-service-starburst-enterprise.py
 
 cat <<EOF > ${STARBURST_HOME}/etc/access-control-system.properties
 access-control.name=allow-all

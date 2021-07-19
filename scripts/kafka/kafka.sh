@@ -24,4 +24,12 @@ then
   ${KAFKA_SCRIPTS}/kafka-setup.sh
 fi
 
-su -c "cd ${KAFKA_HOME} && CLASSPATH=${KAFKA_HOME}/config ./bin/kafka-server-start.sh config/server.properties" kafka
+su -c "cd ${KAFKA_HOME} && CLASSPATH=${KAFKA_HOME}/config ./bin/kafka-server-start.sh config/server.properties &" kafka
+
+KAFKA_PID=`ps -ef  | grep -v grep | grep -i "kafka.Kafka config/server.properties" | awk '{print $2}'`
+
+su -c "mkdir -p /opt/kafka/logs" kafka
+su -c "touch /opt/kafka/logs/server.log" kafka
+
+# prevent the container from exiting
+tail --pid=${KAFKA_PID} -f /opt/kafka/logs/server.log

@@ -23,9 +23,10 @@ COPY ./downloads/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb               ${STAR
 COPY ./downloads/starburstdata.license                                    ${STARBURST_DIST}/
 COPY ./downloads/starburst-ranger-cli-${STARBURST_VERSION}-executable.jar /usr/local/bin/starburst-ranger-cli
 
-COPY ./scripts/starburst/starburst-setup.sh  ${STARBURST_SCRIPTS}/
-COPY ./scripts/starburst/starburst.sh        ${STARBURST_SCRIPTS}/
-COPY ./scripts/starburst/keystore.jks        ${STARBURST_SCRIPTS}/
+COPY ./scripts/starburst/keystore.jks                           ${STARBURST_SCRIPTS}/
+COPY ./scripts/starburst/ranger-service-starburst-enterprise.py ${STARBURST_SCRIPTS}/
+COPY ./scripts/starburst/starburst-setup.sh                     ${STARBURST_SCRIPTS}/
+COPY ./scripts/starburst/starburst.sh                           ${STARBURST_SCRIPTS}/
 
 RUN tar zxf /home/starburst/dist/starburst-enterprise-${STARBURST_VERSION}.tar.gz --directory=${STARBURST_HOME} --strip 1 && \
     rm -f /home/starburst/dist/starburst-enterprise-${STARBURST_VERSION}.tar.gz && \

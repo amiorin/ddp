@@ -29,13 +29,17 @@ then
   sed -i "s/atlas.graph.storage.hostname=.*$/atlas.graph.storage.hostname=ddp-zookeeper.example.com:2181/"             /opt/atlas/conf/atlas-application.properties
   sed -i "s/atlas.audit.hbase.zookeeper.quorum=.*$/atlas.audit.hbase.zookeeper.quorum=ddp-zookeeper.example.com:2181/" /opt/atlas/conf/atlas-application.properties
 
-  sed -i "s/^atlas.graph.index.search.solr.mode=cloud/# atlas.graph.index.search.solr.mode=cloud/"                                              /opt/atlas/conf/atlas-application.properties
-  sed -i "s/^# *atlas.graph.index.search.solr.mode=http/atlas.graph.index.search.solr.mode=http/"                                               /opt/atlas/conf/atlas-application.properties
+  sed -i "s/^atlas.graph.index.search.solr.mode=cloud/# atlas.graph.index.search.solr.mode=cloud/"                                            /opt/atlas/conf/atlas-application.properties
+  sed -i "s/^# *atlas.graph.index.search.solr.mode=http/atlas.graph.index.search.solr.mode=http/"                                             /opt/atlas/conf/atlas-application.properties
   sed -i "s/^.*atlas.graph.index.search.solr.http-urls=.*$/atlas.graph.index.search.solr.http-urls=http:\/\/ddp-solr.example.com:8983\/solr/" /opt/atlas/conf/atlas-application.properties
 
-  sed -i "s/atlas.notification.embedded=.*$/atlas.notification.embedded=false/"                            /opt/atlas/conf/atlas-application.properties
-  sed -i "s/atlas.kafka.zookeeper.connect=.*$/atlas.kafka.zookeeper.connect=ddp-zookeeper.example.com:2181/"    /opt/atlas/conf/atlas-application.properties
-  sed -i "s/atlas.kafka.bootstrap.servers=.*$/atlas.kafka.bootstrap.servers=ddp-kafka.example.com:9092/" /opt/atlas/conf/atlas-application.properties
+  sed -i "s/atlas.notification.embedded=.*$/atlas.notification.embedded=false/"                              /opt/atlas/conf/atlas-application.properties
+  sed -i "s/atlas.kafka.zookeeper.connect=.*$/atlas.kafka.zookeeper.connect=ddp-zookeeper.example.com:2181/" /opt/atlas/conf/atlas-application.properties
+  sed -i "s/atlas.kafka.bootstrap.servers=.*$/atlas.kafka.bootstrap.servers=ddp-kafka.example.com:9092/"     /opt/atlas/conf/atlas-application.properties
+
+  sed -i "s/atlas.authorizer.impl=.*$/atlas.authorizer.impl=ranger/" /opt/atlas/conf/atlas-application.properties
+
+  ${ATLAS_SCRIPTS}/atlas-setup.sh
 
   chown -R atlas:atlas ${ATLAS_HOME}/
 fi
@@ -44,4 +48,4 @@ su -c "cd ${ATLAS_HOME}/bin && ./atlas_start.py" atlas
 ATLAS_PID=`ps -ef  | grep -v grep | grep -i "org.apache.atlas.Atlas" | awk '{print $2}'`
 
 # prevent the container from exiting
-tail --pid=$ATLAS_PID -f /dev/null
+tail --pid=${ATLAS_PID} -f ${ATLAS_HOME}/logs/application.log

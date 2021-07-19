@@ -17,9 +17,17 @@
 FROM ddp-base:latest
 
 ARG ATLAS_VERSION
+ARG RANGER_VERSION
 
-COPY ./scripts/atlas/atlas.sh                                 ${ATLAS_SCRIPTS}/
-COPY ./dist/atlas/apache-atlas-${ATLAS_VERSION}-server.tar.gz /home/atlas/dist/
+COPY ./dist/ranger/ranger-${RANGER_VERSION}-atlas-plugin.tar.gz /home/atlas/dist/
+COPY ./dist/atlas/apache-atlas-${ATLAS_VERSION}-server.tar.gz   /home/atlas/dist/
+
+COPY ./downloads/commons-compress-1.8.1.jar /home/atlas/dist/
+COPY ./downloads/commons-lang3-3.3.2.jar    /home/atlas/dist/
+
+COPY ./scripts/atlas/atlas.sh                        ${ATLAS_SCRIPTS}/
+COPY ./scripts/atlas/atlas-setup.sh                  ${ATLAS_SCRIPTS}/
+COPY ./scripts/atlas/atlas-plugin-install.properties ${ATLAS_SCRIPTS}/
 
 RUN tar xfz /home/atlas/dist/apache-atlas-${ATLAS_VERSION}-server.tar.gz --directory=${ATLAS_HOME}/ --strip 1 && \
     rm -f /home/atlas/dist/apache-atlas-${ATLAS_VERSION}-server.tar.gz && \
@@ -27,6 +35,12 @@ RUN tar xfz /home/atlas/dist/apache-atlas-${ATLAS_VERSION}-server.tar.gz --direc
     rm -rf ${ATLAS_HOME}/logs && \
     ln -s /var/log/atlas ${ATLAS_HOME}/logs && \
     ln -s /home/atlas/data ${ATLAS_HOME}/data && \
+    mkdir -p /opt/ranger/ranger-atlas-plugin && \
+    tar xfz /home/atlas/dist/ranger-${RANGER_VERSION}-atlas-plugin.tar.gz --directory=/opt/ranger/ranger-atlas-plugin --strip 1 && \
+    rm -f /home/atlas/dist/ranger-${RANGER_VERSION}-atlas-plugin.tar.gz && \
+    cp -f /home/atlas/scripts/atlas-plugin-install.properties /opt/ranger/ranger-atlas-plugin/install.properties && \
+    cp -f ${ATLAS_DIST}/commons-compress-1.8.1.jar /opt/ranger/ranger-atlas-plugin/install/lib/ && \
+    cp -f ${ATLAS_DIST}/commons-lang3-3.3.2.jar    /opt/ranger/ranger-atlas-plugin/install/lib/ && \
     chown -R atlas:atlas ${ATLAS_HOME}/ /var/run/atlas/ /var/log/atlas/
 
 COPY ./scripts/hbase/hbase-site.xml ${ATLAS_HOME}/hbase/conf/

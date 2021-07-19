@@ -30,6 +30,7 @@ services:
       dockerfile: Dockerfile.ddp-atlas
       args:
         - ATLAS_VERSION=${ATLAS_VERSION}
+        - RANGER_VERSION=${RANGER_VERSION}
     image: ddp-atlas:latest
     container_name: ddp-atlas
     hostname: ddp-atlas.example.com
@@ -50,6 +51,7 @@ services:
         condition: service_started
     environment:
       - ATLAS_VERSION
+      - RANGER_VERSION
     command:
       - /home/atlas/scripts/atlas.sh
   ddp-base:
@@ -63,7 +65,7 @@ services:
     environment:
       - RANGER_VERSION
       - ATLAS_VERSION
-      - STARBUST_VERSION
+      - STARBURST_VERSION
   ddp-hadoop:
     build:
       context: .
@@ -199,7 +201,6 @@ services:
     image: ddp-starburst:latest
     container_name: ddp-starburst
     hostname: ddp-starburst.example.com
-    restart: always
     depends_on:
       - ddp-base
     networks:

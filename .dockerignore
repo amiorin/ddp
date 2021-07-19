@@ -4,6 +4,7 @@
 !dist/atlas/apache-atlas-*-hive-hook.tar.gz
 !dist/atlas/apache-atlas-*-server.tar.gz
 !dist/ranger/ranger-*-admin.tar.gz
+!dist/ranger/ranger-*-atlas-plugin.tar.gz
 !dist/ranger/ranger-*-hdfs-plugin.tar.gz
 !dist/ranger/ranger-*-yarn-plugin.tar.gz
 !dist/ranger/ranger-*-hive-plugin.tar.gz

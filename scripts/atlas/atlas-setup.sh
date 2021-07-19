@@ -18,35 +18,5 @@
 
 set -xe
 
-if [ ! -e ${RANGER_HOME}/.setupDone ]
-then
-  SETUP_RANGER=true
-else
-  SETUP_RANGER=false
-fi
-
-if [ "${SETUP_RANGER}" == "true" ]
-then
-  su -c "cd ${RANGER_HOME}/admin && ./setup.sh" ranger
-
-  touch ${RANGER_HOME}/.setupDone
-fi
-
-su -c "cd ${RANGER_HOME}/admin && ./ews/ranger-admin-services.sh start" ranger
-
-if [ "${SETUP_RANGER}" == "true" ]
-then
-  # Wait for Ranger Admin to become ready
-  while ! nc -z localhost 6080; do   
-    sleep 1
-  done
-
-  python3 ${RANGER_SCRIPTS}/ranger-service-dev_atlas.py
-  python3 ${RANGER_SCRIPTS}/ranger-service-dev_hive.py
-  ${RANGER_SCRIPTS}/ranger-setup.sh
-fi
-
-RANGER_ADMIN_PID=`ps -ef  | grep -v grep | grep -i "org.apache.ranger.server.tomcat.EmbeddedServer" | awk '{print $2}'`
-
-# prevent the container from exiting
-tail --pid=$RANGER_ADMIN_PID -f /dev/null
+cd ${RANGER_HOME}/ranger-atlas-plugin
+./enable-atlas-plugin.sh

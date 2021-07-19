@@ -118,13 +118,27 @@ bin/kafka-console-consumer.sh --topic ATLAS_ENTITIES --from-beginning --bootstra
 
 ```sh
 # Fast container rebuild
-docker-compose up -d
+docker-compose build ddp-base && \
+docker-compose up -d && \
 docker-compose logs -f
-# rebuild ddp-starburst only
-docker-compose stop ddp-starburst
-docker-compose build --no-cache ddp-starburst
-docker-compose up -d --no-deps
-docker-compose logs -f ddp-starburst
+# rebuild ddp-atlas only
+export SERVICE=ddp-starburst \
+docker-compose stop $SERVICE && \
+docker-compose build --no-cache $SERVICE && \
+docker-compose up -d --no-deps && \
+docker-compose logs -f $SERVICE
+# shell in the service under developement
+docker exec -it --privileged $SERVICE bash
+# shutdown and clean up
+docker-compose down && \
+docker system prune -af
+```
+
+```sql
+-- before starting ranger after a build step
+DROP DATABASE ranger;
+CREATE DATABASE ranger;
+GRANT ALL PRIVILEGES ON DATABASE ranger TO rangeradmin;
 ```
 
 ## Containers

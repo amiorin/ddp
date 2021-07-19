@@ -51,3 +51,6 @@ downloadIfNotPresent apache-hive-${HIVE_VERSION}-bin.tar.gz           https://ar
 downloadIfNotPresent hadoop-${HIVE_HADOOP_VERSION}.tar.gz             https://archive.apache.org/dist/hadoop/common/hadoop-${HIVE_HADOOP_VERSION}
 downloadIfNotPresent hbase-${HBASE_VERSION}-bin.tar.gz                https://archive.apache.org/dist/hbase/${HBASE_VERSION}
 downloadIfNotPresent postgresql-42.2.16.jre7.jar                      https://search.maven.org/remotecontent?filepath=org/postgresql/postgresql/42.2.16.jre7
+# needed by ranger-atlas-plugin
+downloadIfNotPresent commons-compress-1.8.1.jar                       https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.8.1
+downloadIfNotPresent commons-lang3-3.3.2.jar                         https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.3.2

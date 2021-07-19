@@ -36,3 +36,6 @@ su -c "${HIVE_HOME}/bin/schematool -dbType postgres -initSchema" hive || true
 mkdir -p /opt/hive/logs
 chown -R hive:hadoop /opt/hive/
 chmod g+w /opt/hive/logs
+
+cd ${RANGER_HOME}/ranger-hive-plugin
+./enable-hive-plugin.sh
