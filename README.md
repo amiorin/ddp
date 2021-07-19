@@ -22,9 +22,42 @@ The Docker files in this folder create docker images and run them to build Apach
 
 ## Usage
 1. Ensure that you have recent version of Docker installed from [docker.io](http://www.docker.io) (as of this writing: Engine 20.10.5, Compose 1.28.5).
-   Make sure to configure docker with at least 6gb of memory.
+   Make sure to configure docker with at least 8gb of memory.
 
 1. Set this folder as your working directory.
+
+1. Build and copy the Apache Ranger files from https://github.com/apache/ranger/tree/master/dev-support/ranger-docker to ./dist/ranger
+    
+       ranger-3.0.0-SNAPSHOT-admin.tar.gz
+       ranger-3.0.0-SNAPSHOT-atlas-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-elasticsearch-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-hbase-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-hdfs-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-hive-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-kafka-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-kms.tar.gz
+       ranger-3.0.0-SNAPSHOT-knox-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-kylin-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-migration-util.tar.gz
+       ranger-3.0.0-SNAPSHOT-ozone-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-presto-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-ranger-tools.tar.gz
+       ranger-3.0.0-SNAPSHOT-schema-registry-plugin.jar
+       ranger-3.0.0-SNAPSHOT-solr-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-solr_audit_conf.tar.gz
+       ranger-3.0.0-SNAPSHOT-solr_audit_conf.zip
+       ranger-3.0.0-SNAPSHOT-sqoop-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-src.tar.gz
+       ranger-3.0.0-SNAPSHOT-storm-plugin.tar.gz
+       ranger-3.0.0-SNAPSHOT-tagsync.tar.gz
+       ranger-3.0.0-SNAPSHOT-usersync.tar.gz
+       ranger-3.0.0-SNAPSHOT-yarn-plugin.tar.gz
+
+1. Build and copy the Apache Atlas files from https://github.com/apache/atlas/tree/master/dev-support/atlas-docker to ./dist/atlas
+
+       apache-atlas-3.0.0-SNAPSHOT-hbase-hook.tar.gz
+       apache-atlas-3.0.0-SNAPSHOT-hive-hook.tar.gz
+       apache-atlas-3.0.0-SNAPSHOT-server.tar.gz
 
 1. Update environment variables in .env file, if necessary
 
@@ -33,13 +66,27 @@ The Docker files in this folder create docker images and run them to build Apach
 1. Save the Starburst license in ```./downloads/starburstdata.license```
 
 1. Execute following command to download necessary archives to setup Atlas/Ranger/HDFS/Hive/HBase/Kafka/Starburst services:
-     ./download-archives.sh
 
-1. Build and start Starburst Trino in containers using docker-compose
+       ./download-archives.sh
 
-   1. Execute following command to start Starburst Trino:
+1. Some files needs to be copied manually. The content of ```./downloads``` must be like this:
 
-          docker-compose up
+       apache-hive-3.1.2-bin.tar.gz
+       hadoop-3.1.0.tar.gz
+       hadoop-3.3.1.tar.gz
+       hbase-2.3.3-bin.tar.gz
+       kafka_2.12-2.8.0.tgz
+       postgresql-42.2.16.jre7.jar
+       starburst-enterprise-356-e.5.tar.gz
+       starburst-ranger-cli-356-e.5-executable.jar
+       starburst-ranger-plugin-2.0.51.jar
+       starburstdata.license
+       trino-jdbc-356-e.5.jar
+       zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb
+
+1. Execute following command to start Starburst Trino:
+
+       docker-compose up
 
 1. Starburst Trino can be accessed at https://localhost/ui (ddp/ddpR0cks!) or https://localhost/ui/insights
    Paste chrome://flags/#allow-insecure-localhost to fix the certificate problem.
