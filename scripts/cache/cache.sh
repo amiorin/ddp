@@ -18,18 +18,11 @@
 
 set -xe
 
-if [ ! -e ${KAFKA_HOME}/.setupDone ]
+if [ ! -e ${CACHE_HOME}/.setupDone ]
 then
-  touch ${KAFKA_HOME}/.setupDone
-  ${KAFKA_SCRIPTS}/kafka-setup.sh
+  ${CACHE_SCRIPTS}/cache-setup.sh
+  su -c "touch ${CACHE_HOME}/.setupDone" starburst
 fi
 
-su -c "cd ${KAFKA_HOME} && CLASSPATH=${KAFKA_HOME}/config ./bin/kafka-server-start.sh config/server.properties &" kafka
-
-KAFKA_PID=`ps -ef  | grep -v grep | grep -i "kafka.Kafka config/server.properties" | awk '{print $2}'`
-
-su -c "mkdir -p /opt/kafka/logs" kafka
-su -c "touch /opt/kafka/logs/server.log" kafka
-
-# prevent the container from exiting
-tail --pid=${KAFKA_PID} -F /opt/kafka/logs/server.log
+# start 
+su -c "cd ${CACHE_HOME} && ./bin/launcher run" starburst

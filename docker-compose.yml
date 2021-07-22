@@ -1,5 +1,20 @@
 version: '3'
 services:
+  ddp-cache:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-cache
+      args:
+        - STARBURST_VERSION=${STARBURST_VERSION}
+    image: ddp-cache:latest
+    container_name: ddp-cache
+    hostname: ddp-cache.example.com
+    networks:
+      - ddp
+    ports:
+      - "8180:8180"
+    environment:
+      - STARBURST_VERSION
   ddp-ranger:
     build:
       context: .
@@ -24,6 +39,7 @@ services:
     environment:
       - RANGER_VERSION
       - STARBURST_VERSION
+    # entrypoint: tail -F /var/log/ranger/ranger-admin-ddp-ranger.example.com-ranger.log
   ddp-atlas:
     build:
       context: .
@@ -81,8 +97,6 @@ services:
       - "9000:9000"
       - "8088:8088"
       - "9870:9870"
-    depends_on:
-      - ddp-base
     healthcheck:
       test: "hdfs dfs -ls /"
       interval: 1m30s
@@ -91,6 +105,7 @@ services:
       start_period: 40s
     environment:
       - HADOOP_VERSION
+    # entrypoint: tail -F /opt/hadoop/logs/hadoop-hdfs-namenode-ddp-hadoop.example.com.log
   ddp-hbase:
     build:
       context: .
@@ -201,8 +216,6 @@ services:
     image: ddp-starburst:latest
     container_name: ddp-starburst
     hostname: ddp-starburst.example.com
-    depends_on:
-      - ddp-base
     networks:
       - ddp
     environment:
@@ -216,6 +229,8 @@ services:
       ddp-hive:
         condition: service_started
       ddp-ranger:
+        condition: service_started
+      ddp-atlas:
         condition: service_started
   ddp-zookeeper:
     build:

@@ -18,18 +18,31 @@
 
 set -xe
 
-if [ ! -e ${KAFKA_HOME}/.setupDone ]
-then
-  touch ${KAFKA_HOME}/.setupDone
-  ${KAFKA_SCRIPTS}/kafka-setup.sh
-fi
+mkdir -p /etc/sep/catalog
+cd ${CACHE_HOME} && ln -s /etc/sep etc
 
-su -c "cd ${KAFKA_HOME} && CLASSPATH=${KAFKA_HOME}/config ./bin/kafka-server-start.sh config/server.properties &" kafka
+cp ${CACHE_DIST}/starburstdata.license /etc/sep/starburstdata.license
 
-KAFKA_PID=`ps -ef  | grep -v grep | grep -i "kafka.Kafka config/server.properties" | awk '{print $2}'`
+cat <<EOF > ${CACHE_HOME}/etc/config.properties
+service-database.user=cache
+service-database.password=ddpR0cks!
+service-database.jdbc-url=jdbc:postgresql://ddp-postgres.example.com/redirections
+starburst.user=ddp
+starburst.jdbc-url=jdbc:trino://ddp-starburst.example.com:8080
+rules.file=etc/rules.json
+EOF
 
-su -c "mkdir -p /opt/kafka/logs" kafka
-su -c "touch /opt/kafka/logs/server.log" kafka
+cat <<EOF > ${CACHE_HOME}/etc/rules.json
+{
+  "rules": []
+}
+EOF
 
-# prevent the container from exiting
-tail --pid=${KAFKA_PID} -F /opt/kafka/logs/server.log
+cat <<EOF > ${CACHE_HOME}/etc/jvm.config
+-server
+-Xmx512M
+-XX:+ExitOnOutOfMemoryError
+-XX:+HeapDumpOnOutOfMemoryError
+EOF
+
+chown -R starburst:starburst ${CACHE_HOME}/

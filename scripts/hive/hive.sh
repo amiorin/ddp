@@ -30,4 +30,4 @@ while ! nc -z localhost 9083; do
 done
 
 su -c "${HIVE_HOME}/bin/hive --service hiveserver2 &" hive
-tail --pid=$$ -f /tmp/hive/hive.log
+tail --pid=$$ -F /tmp/hive/hive.log

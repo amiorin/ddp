@@ -61,7 +61,7 @@ atlas.cluster.name=starburst
 atlas.kafka.bootstrap.servers=ddp-kafka.example.com:9092
 atlas.server.url=http://ddp-atlas.example.com:21000
 atlas.username=admin
-atlas.password=atlasR0cks!
+atlas.password=ddpR0cks!
 EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/access-control-ranger.properties
@@ -73,14 +73,15 @@ ranger.password=ddpR0cks!
 ranger.policy-refresh-interval=30s
 EOF
 
-while ! nc -z ddp-ranger.example.com 6080; do   
-  sleep 1
-done
-
 starburst-ranger-cli service-definition starburst create \
   --properties=${STARBURST_HOME}/etc/access-control-ranger.properties || true
 
-python3 ${STARBURST_SCRIPTS}/ranger-service-starburst-enterprise.py
+python3 ${STARBURST_SCRIPTS}/ranger-service-starburst-enterprise.py || true
+
+# while ! nc -z ddp-atlas.example.com 21000; do   
+#   sleep 1
+# done
+# starburst-atlas-cli types create --server=http://ddp-atlas.example.com:21000 --user admin --password
 
 cat <<EOF > ${STARBURST_HOME}/etc/access-control-system.properties
 access-control.name=allow-all
@@ -124,6 +125,16 @@ EOF
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/tpcds.properties
 connector.name=tpcds
 EOF
+
+for i in event_logger hive ranger redirections
+do
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/postgres_${i}.properties
+connector.name=postgresql
+connection-url=jdbc:postgresql://ddp-postgres.example.com:5432/${i}
+connection-user=postgres
+connection-password=ddpR0cks!
+EOF
+done
 
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/hive.properties
 connector.name=tpcds

@@ -24,7 +24,6 @@ CREATE_HDFS_DIR=false
 
 if [ ! -e ${HADOOP_HOME}/.setupDone ]
 then
-  touch ${HADOOP_HOME}/.setupDone
   su -c "ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa" hdfs
   su -c "cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys" hdfs
   su -c "chmod 0600 ~/.ssh/authorized_keys" hdfs
@@ -40,6 +39,7 @@ then
   su -c "${HADOOP_HOME}/bin/hdfs namenode -format" hdfs
 
   CREATE_HDFS_DIR=true
+  su -c "touch ${HADOOP_HOME}/.setupDone" hdfs
 fi
 
 su -c "${HADOOP_HOME}/sbin/start-dfs.sh" hdfs
@@ -53,4 +53,4 @@ fi
 NAMENODE_PID=`ps -ef  | grep -v grep | grep -i "org.apache.hadoop.hdfs.server.namenode.NameNode" | awk '{print $2}'`
 
 # prevent the container from exiting
-tail --pid=$NAMENODE_PID -f /opt/hadoop/logs/hadoop-hdfs-namenode-ddp-hadoop.example.com.log
+tail --pid=$NAMENODE_PID -F /opt/hadoop/logs/hadoop-hdfs-namenode-ddp-hadoop.example.com.log

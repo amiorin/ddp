@@ -22,7 +22,7 @@ if [ ! -e ${ATLAS_HOME}/.setupDone ]
 then
   touch ${ATLAS_HOME}/.setupDone
 
-  encryptedPwd=$(${ATLAS_HOME}/bin/cputil.py -g -u admin -p atlasR0cks! -s)
+  encryptedPwd=$(${ATLAS_HOME}/bin/cputil.py -g -u admin -p ddpR0cks! -s)
 
   echo "admin=ADMIN::${encryptedPwd}" > ${ATLAS_HOME}/conf/users-credentials.properties
 
@@ -48,4 +48,4 @@ su -c "cd ${ATLAS_HOME}/bin && ./atlas_start.py" atlas
 ATLAS_PID=`ps -ef  | grep -v grep | grep -i "org.apache.atlas.Atlas" | awk '{print $2}'`
 
 # prevent the container from exiting
-tail --pid=${ATLAS_PID} -f ${ATLAS_HOME}/logs/application.log
+tail --pid=${ATLAS_PID} -F ${ATLAS_HOME}/logs/application.log

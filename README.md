@@ -122,7 +122,7 @@ docker-compose build ddp-base && \
 docker-compose up -d && \
 docker-compose logs -f
 # rebuild ddp-atlas only
-export SERVICE=ddp-starburst \
+export SERVICE=ddp-kafka && \
 docker-compose stop $SERVICE && \
 docker-compose build --no-cache $SERVICE && \
 docker-compose up -d --no-deps && \
@@ -139,6 +139,54 @@ docker system prune -af
 DROP DATABASE ranger;
 CREATE DATABASE ranger;
 GRANT ALL PRIVILEGES ON DATABASE ranger TO rangeradmin;
+```
+
+```bash
+# Starburst Atlas integration
+export ATLAS_URL=http://ddp-atlas.example.com:21000
+export STARBURST_HOST=ddp-starburst.example.com:8080
+starburst-atlas-cli types create --server=${ATLAS_URL} --user admin --password
+starburst-atlas-cli cluster register --server=${ATLAS_URL} --user=admin --password --cluster-name=ddp-starburst
+starburst-atlas-cli catalog register --server=${ATLAS_URL} \
+--user admin --password \
+--cluster-name ddp-starburst \
+--catalog tpcds \
+--starburst-jdbc-url "jdbc:trino://${STARBURST_HOST}?user=ddp"
+
+
+```
+
+```
+CREATE TABLE hive.default.item3 (
+   i_item_sk bigint,
+   i_item_id char(16),
+   i_rec_start_date date,
+   i_rec_end_date date,
+   i_item_desc varchar(200),
+   i_current_price decimal(7, 2),
+   i_wholesale_cost decimal(7, 2),
+   i_brand_id integer,
+   i_brand char(50),
+   i_class_id integer,
+   i_class char(50),
+   i_category_id integer,
+   i_category char(50),
+   i_manufact_id integer,
+   i_manufact char(50),
+   i_size char(20),
+   i_formulation char(20),
+   i_color char(20),
+   i_units char(10),
+   i_container char(10),
+   i_manager_id integer
+)
+WITH (
+   format = 'ORC',
+   external_location = 'hdfs:///user/hive/warehouse/item'
+);
+   i_product_name char(50)
+
+CREATE OR REPLACE VIEW hive.default.v_item3 SECURITY INVOKER AS select * from hive.default.item3;
 ```
 
 ## Containers

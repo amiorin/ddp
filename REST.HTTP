@@ -1,0 +1,4 @@
+###
+GET http://localhost:21000/api/atlas/v2/types/typedefs
+Authorization: Basic admin:atlasR0cks!
+Content-Type: application/json

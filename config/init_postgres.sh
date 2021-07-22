@@ -31,4 +31,8 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     CREATE USER rangeradmin WITH PASSWORD 'ddpR0cks!';
     CREATE DATABASE ranger;
     GRANT ALL PRIVILEGES ON DATABASE ranger TO rangeradmin;
+
+    CREATE USER cache WITH PASSWORD 'ddpR0cks!';
+    CREATE DATABASE redirections;
+    GRANT ALL PRIVILEGES ON DATABASE redirections TO cache;
 EOSQL

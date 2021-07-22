@@ -20,8 +20,8 @@ set -xe
 
 if [ ! -e ${HBASE_HOME}/.setupDone ]
 then
-  touch ${HBASE_HOME}/.setupDone
   ${HBASE_SCRIPTS}/hbase-setup.sh
+  su -c "touch ${HBASE_HOME}/.setupDone" hbase
 fi
 
 su -c "${HBASE_HOME}/bin/start-hbase.sh" hbase
@@ -29,4 +29,4 @@ su -c "${HBASE_HOME}/bin/start-hbase.sh" hbase
 HBASE_MASTER_PID=`ps -ef  | grep -v grep | grep -i "org.apache.hadoop.hbase.master.HMaster" | awk '{print $2}'`
 
 # prevent the container from exiting
-tail --pid=$HBASE_MASTER_PID -f /opt/hbase/logs/hbase-hbase-master-ddp-hbase.example.com.log
+tail --pid=$HBASE_MASTER_PID -F /opt/hbase/logs/hbase-hbase-master-ddp-hbase.example.com.log

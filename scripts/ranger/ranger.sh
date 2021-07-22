@@ -49,4 +49,4 @@ fi
 RANGER_ADMIN_PID=`ps -ef  | grep -v grep | grep -i "org.apache.ranger.server.tomcat.EmbeddedServer" | awk '{print $2}'`
 
 # prevent the container from exiting
-tail --pid=$RANGER_ADMIN_PID -f /dev/null
+tail --pid=$RANGER_ADMIN_PID -F /var/log/ranger/ranger-admin-ddp-ranger.example.com-ranger.log
