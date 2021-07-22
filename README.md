@@ -189,6 +189,17 @@ WITH (
 CREATE OR REPLACE VIEW hive.default.v_item3 SECURITY INVOKER AS select * from hive.default.item3;
 ```
 
+```sh
+# starburst cache
+docker exec -it --privileged ddp-cache bash
+
+starburst-cache-cli cache \
+  --cache-ttl 1h \
+  --source postgres_event_logger.public.query_tables \
+  --target-catalog hive \
+  --target-schema default
+```
+
 ## Containers
 * Starburst Trino
 * Atlas

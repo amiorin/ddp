@@ -22,9 +22,9 @@ ENV CACHE_DIST    /home/cache/dist
 ENV CACHE_SCRIPTS /home/cache/scripts
 
 COPY ./downloads/starburst-cache-service-${STARBURST_VERSION}.tar.gz     ${CACHE_DIST}/
-COPY ./downloads/starburst-cache-cli-${STARBURST_VERSION}-executable.jar /usr/local/bin/
 COPY ./downloads/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb              ${CACHE_DIST}/
 COPY ./downloads/starburstdata.license                                   ${CACHE_DIST}/
+COPY ./downloads/starburst-cache-cli-${STARBURST_VERSION}-executable.jar /usr/local/bin/starburst-cache-cli
 
 COPY ./scripts/cache/cache-setup.sh ${CACHE_SCRIPTS}/
 COPY ./scripts/cache/cache.sh       ${CACHE_SCRIPTS}/

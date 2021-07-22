@@ -133,6 +133,8 @@ connector.name=postgresql
 connection-url=jdbc:postgresql://ddp-postgres.example.com:5432/${i}
 connection-user=postgres
 connection-password=ddpR0cks!
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache.example.com:8180
 EOF
 done
 

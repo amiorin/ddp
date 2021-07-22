@@ -220,6 +220,8 @@ services:
       - ddp
     environment:
     - STARBURST_VERSION
+    # volumes:
+    #   - ${PWD}/scripts/starburst:/home/starburst/scripts
     ports:
       - "443:443"
       - "8080:8080"
@@ -232,6 +234,7 @@ services:
         condition: service_started
       ddp-atlas:
         condition: service_started
+    # entrypoint: tail --pid=1 -F /dev/null
   ddp-zookeeper:
     build:
       context: .
