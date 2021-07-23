@@ -57,7 +57,7 @@ EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/atlas-logger.properties
 event-listener.name=starburst-atlas
-atlas.cluster.name=starburst
+atlas.cluster.name=ddp-starburst.example.com
 atlas.kafka.bootstrap.servers=ddp-kafka.example.com:9092
 atlas.server.url=http://ddp-atlas.example.com:21000
 atlas.username=admin

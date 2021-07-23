@@ -146,7 +146,7 @@ GRANT ALL PRIVILEGES ON DATABASE ranger TO rangeradmin;
 export ATLAS_URL=http://ddp-atlas.example.com:21000
 export STARBURST_HOST=ddp-starburst.example.com:8080
 starburst-atlas-cli types create --server=${ATLAS_URL} --user admin --password
-starburst-atlas-cli cluster register --server=${ATLAS_URL} --user=admin --password --cluster-name=ddp-starburst
+starburst-atlas-cli cluster register --server=${ATLAS_URL} --user=admin --password --cluster-name=ddp-starburst.example.com
 starburst-atlas-cli catalog register --server=${ATLAS_URL} \
 --user admin --password \
 --cluster-name ddp-starburst \

@@ -32,6 +32,7 @@ starburst.jdbc-url=jdbc:trino://ddp-starburst.example.com:8080
 rules.file=etc/rules.json
 EOF
 
+# You can find it in the manual starting from Starburst 358-e.
 cat <<EOF > ${CACHE_HOME}/etc/rules.json
 {
   "rules": []
