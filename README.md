@@ -197,7 +197,10 @@ starburst-cache-cli cache \
   --cache-ttl 1h \
   --source postgres_event_logger.public.query_tables \
   --target-catalog hive \
-  --target-schema default
+  --target-schema cache 
+
+starburst-cache-cli expire_redirection \
+  --id 3
 ```
 
 ## Containers
