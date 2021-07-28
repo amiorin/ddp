@@ -26,7 +26,11 @@ fi
 
 su -c "cd ${KAFKA_HOME} && CLASSPATH=${KAFKA_HOME}/config ./bin/kafka-server-start.sh config/server.properties &" kafka
 
-KAFKA_PID=`ps -ef  | grep -v grep | grep -i "kafka.Kafka config/server.properties" | awk '{print $2}'`
+until [ "$KAFKA_PID" -eq "$KAFKA_PID" ] 2> /dev/null
+do
+  KAFKA_PID=`ps -ef  | grep -v grep | grep -i "kafka.Kafka config/server.properties" | awk '{print $2}'`
+  sleep 1
+done
 
 su -c "mkdir -p /opt/kafka/logs" kafka
 su -c "touch /opt/kafka/logs/server.log" kafka
