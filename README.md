@@ -101,7 +101,7 @@ The Docker files in this folder create docker images and run them to build Apach
    * Starburst http://localhost:8080/ui/insights
 * Marketing domain
    * Starburst https://localhost:1443/ui
-   * Starburst https://localhost:1433/ui/insights
+   * Starburst https://localhost:1443/ui/insights
    * Starburst http://localhost:18080/ui
    * Starburst http://localhost:18080/ui/insights
 * Namenode http://localhost:9870
