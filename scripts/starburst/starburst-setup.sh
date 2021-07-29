@@ -139,11 +139,23 @@ EOF
 done
 
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/hive.properties
-connector.name=tpcds
 connector.name=hive-hadoop2
 hive.metastore.uri=thrift://ddp-hive.example.com:9083
 hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
 hive.security=allow-all
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache.example.com:8180
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/delta.properties
+connector.name=delta-lake
+hive.metastore.uri=thrift://ddp-hive.example.com:9083
+hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
+hive.security=allow-all
+# not supported yet
+# delta.hive-catalog-name=hive
+# redirection.config-source=SERVICE
+# cache-service.uri=http://ddp-cache.example.com:8180
 EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/core-site.xml

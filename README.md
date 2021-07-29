@@ -122,7 +122,7 @@ docker-compose build ddp-base && \
 docker-compose up -d && \
 docker-compose logs -f
 # rebuild ddp-atlas only
-export SERVICE=ddp-kafka && \
+export SERVICE=ddp-starburst && \
 docker-compose stop $SERVICE && \
 docker-compose build --no-cache $SERVICE && \
 docker-compose up -d --no-deps && \

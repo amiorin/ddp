@@ -21,7 +21,7 @@ ARG STARBURST_VERSION
 
 COPY ./dist/ranger/ranger-${RANGER_VERSION}-admin.tar.gz                  ${RANGER_DIST}/
 COPY ./downloads/postgresql-42.2.16.jre7.jar                              ${RANGER_DIST}/
-COPY ./downloads/starburst-ranger-plugin-2.0.51.jar                       ${RANGER_DIST}/starburst-ranger-plugin.jar
+COPY ./downloads/starburst-ranger-plugin-2.1.0-e.7.jar                    ${RANGER_DIST}/starburst-ranger-plugin.jar
 COPY ./downloads/trino-jdbc-${STARBURST_VERSION}.jar                      ${RANGER_DIST}/trino-jdbc.jar
 
 COPY ./scripts/ranger/ranger.sh                              ${RANGER_SCRIPTS}/

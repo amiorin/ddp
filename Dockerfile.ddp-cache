@@ -21,17 +21,17 @@ ENV CACHE_HOME    /opt/starburst-cache-service
 ENV CACHE_DIST    /home/cache/dist
 ENV CACHE_SCRIPTS /home/cache/scripts
 
-COPY ./downloads/starburst-cache-service-${STARBURST_VERSION}.tar.gz     ${CACHE_DIST}/
-COPY ./downloads/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb              ${CACHE_DIST}/
-COPY ./downloads/starburstdata.license                                   ${CACHE_DIST}/
-COPY ./downloads/starburst-cache-cli-${STARBURST_VERSION}-executable.jar /usr/local/bin/starburst-cache-cli
+COPY ./downloads/starburst-cache-service-356-e.5.tar.gz     ${CACHE_DIST}/
+COPY ./downloads/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb ${CACHE_DIST}/
+COPY ./downloads/starburstdata.license                      ${CACHE_DIST}/
+COPY ./downloads/starburst-cache-cli-356-e.5-executable.jar /usr/local/bin/starburst-cache-cli
 
 COPY ./scripts/cache/cache-setup.sh ${CACHE_SCRIPTS}/
 COPY ./scripts/cache/cache.sh       ${CACHE_SCRIPTS}/
 
 RUN mkdir -p $CACHE_HOME && \
-    tar zxf ${CACHE_DIST}/starburst-cache-service-${STARBURST_VERSION}.tar.gz --directory=${CACHE_HOME} --strip 1 && \
-    rm -f ${CACHE_DIST}/dist/starburst-cache-service-${STARBURST_VERSION}.tar.gz && \
+    tar zxf ${CACHE_DIST}/starburst-cache-service-356-e.5.tar.gz --directory=${CACHE_HOME} --strip 1 && \
+    rm -f ${CACHE_DIST}/dist/starburst-cache-service-356-e.5.tar.gz && \
     dpkg -i ${CACHE_DIST}/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb && \
     rm -f ${CACHE_DIST}/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb && \
     chown -R starburst:starburst ${CACHE_HOME}/
