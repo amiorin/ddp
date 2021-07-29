@@ -94,10 +94,16 @@ The Docker files in this folder create docker images and run them to build Apach
 1. Starburst Trino cli ```trino-cli --server=https://localhost --insecure --password --user ddp``` (ddp/ddpR0cks!)
 
 ## Web
-* Starburst https://localhost/ui
-* Starburst https://localhost/ui/insights
-* Starburst http://localhost:8080/ui
-* Starburst http://localhost:8080/ui/insights
+* Generic domain
+   * Starburst https://localhost/ui
+   * Starburst https://localhost/ui/insights
+   * Starburst http://localhost:8080/ui
+   * Starburst http://localhost:8080/ui/insights
+* Marketing domain
+   * Starburst https://localhost:1443/ui
+   * Starburst https://localhost:1433/ui/insights
+   * Starburst http://localhost:18080/ui
+   * Starburst http://localhost:18080/ui/insights
 * Namenode http://localhost:9870
 * Resource Manager http://localhost:8088
 * HBase http://localhost:16010

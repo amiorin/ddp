@@ -21,8 +21,8 @@ set -xe
 mkdir -p /etc/sep/catalog
 cd ${STARBURST_HOME} && ln -s /etc/sep etc
 
-cp ${STARBURST_DIST}/starburstdata.license /etc/sep/starburstdata.license
-cp ${STARBURST_SCRIPTS}/keystore.jks       /etc/sep/keystore.jks
+cp ${DOWNLOADS}/starburstdata.license /etc/sep/starburstdata.license
+cp ${SCRIPTS}/keystore.jks       /etc/sep/keystore.jks
 
 touch ${STARBURST_HOME}/etc/password.db
 htpasswd -b -B -C 10 ${STARBURST_HOME}/etc/password.db ddp ddpR0cks!
@@ -30,21 +30,17 @@ htpasswd -b -B -C 10 ${STARBURST_HOME}/etc/password.db ddp ddpR0cks!
 cat <<EOF > ${STARBURST_HOME}/etc/config.properties
 coordinator=true
 node-scheduler.include-coordinator=true
-node.internal-address=ddp-starburst.example.com
-http-server.http.port=8080
+node.internal-address=ddp-${NAME}.example.com
+http-server.http.port=${HTTP_PORT}
 http-server.http.enabled=true
 http-server.https.enabled=true
-http-server.https.port=443
+http-server.https.port=${HTTPS_PORT}
 http-server.https.keystore.path=etc/keystore.jks
 http-server.https.keystore.key=changeit
 http-server.authentication.type=PASSWORD,CERTIFICATE
 http-server.authentication.allow-insecure-over-http=true
-discovery-server.enabled=true
-discovery.uri=http://localhost:8080
+discovery.uri=http://localhost:${HTTP_PORT}
 internal-communication.https.required=false
-query.max-memory=5GB
-query.max-memory-per-node=1GB
-query.max-total-memory-per-node=2GB
 event-listener.config-files=etc/event-logger.properties,etc/atlas-logger.properties
 insights.persistence-enabled=true
 insights.metrics-persistence-enabled=true
@@ -101,7 +97,7 @@ EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/jvm.config
 -server
--Xmx16G
+-Xmx1G
 -XX:-UseBiasedLocking
 -XX:+UseG1GC
 -XX:G1HeapRegionSize=32M
@@ -118,7 +114,7 @@ cat <<EOF > ${STARBURST_HOME}/etc/jvm.config
 EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/node.properties
-node.environment=production
+node.environment=${NAME}
 node.id=ffffffff-ffff-ffff-ffff-ffffffffffff
 EOF
 
@@ -139,7 +135,7 @@ EOF
 done
 
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/hive.properties
-connector.name=hive-hadoop2
+connector.name=hive
 hive.metastore.uri=thrift://ddp-hive.example.com:9083
 hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
 hive.security=allow-all
@@ -152,8 +148,8 @@ connector.name=delta-lake
 hive.metastore.uri=thrift://ddp-hive.example.com:9083
 hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
 hive.security=allow-all
+delta.hive-catalog-name=hive
 # not supported yet
-# delta.hive-catalog-name=hive
 # redirection.config-source=SERVICE
 # cache-service.uri=http://ddp-cache.example.com:8180
 EOF

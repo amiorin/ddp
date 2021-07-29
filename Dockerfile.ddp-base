@@ -35,8 +35,6 @@ ENV ATLAS_HOME        /opt/atlas
 ENV RANGER_DIST       /home/ranger/dist
 ENV RANGER_SCRIPTS    /home/ranger/scripts
 ENV RANGER_HOME       /opt/ranger
-ENV STARBURST_DIST    /home/starburst/dist
-ENV STARBURST_SCRIPTS /home/starburst/scripts
 ENV STARBURST_HOME    /opt/starburst
 
 # setup groups, users, directories

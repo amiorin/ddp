@@ -18,14 +18,6 @@
 
 set -xe
 
-export SCRIPTS=$(dirname "$0")
-
-if [ ! -e ${STARBURST_HOME}/.setupDone ]
-then
-  $SCRIPTS/starburst-install.sh
-  $SCRIPTS/starburst-setup.sh
-  su -c "touch ${STARBURST_HOME}/.setupDone" starburst
-fi
-
-# start 
-exec su starburst -c "cd ${STARBURST_HOME} && ./bin/launcher run"
+tar zxf ${DOWNLOADS}/starburst-enterprise-${STARBURST_VERSION}.tar.gz --directory=${STARBURST_HOME} --strip 1
+dpkg -i ${DOWNLOADS}/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb
+chown -R starburst:starburst ${STARBURST_HOME}/

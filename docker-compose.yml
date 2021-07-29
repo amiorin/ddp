@@ -207,10 +207,33 @@ services:
       - "8983:8983"
     logging:
       driver: none
+  ddp-marketing:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-base
+      args:
+        - STARBURST_VERSION=${STARBURST_VERSION}
+    image: ddp-marketing:latest
+    container_name: ddp-marketing
+    hostname: ddp-marketing.example.com
+    networks:
+      - ddp
+    environment:
+    - STARBURST_VERSION
+    - HTTPS_PORT=1443
+    - HTTP_PORT=18080
+    - NAME=marketing
+    - DOWNLOADS=/ddp/downloads
+    volumes:
+      - ${PWD}:/ddp
+    ports:
+      - "1443:1443"
+      - "18080:18080"
+    entrypoint: /ddp/scripts/starburst/starburst.sh
   ddp-starburst:
     build:
       context: .
-      dockerfile: Dockerfile.ddp-starburst
+      dockerfile: Dockerfile.ddp-base
       args:
         - STARBURST_VERSION=${STARBURST_VERSION}
     image: ddp-starburst:latest
@@ -220,8 +243,12 @@ services:
       - ddp
     environment:
     - STARBURST_VERSION
-    # volumes:
-    #   - ${PWD}/scripts/starburst:/home/starburst/scripts
+    - HTTPS_PORT=1443
+    - HTTP_PORT=18080
+    - NAME=starburst
+    - DOWNLOADS=/ddp/downloads
+    volumes:
+      - ${PWD}:/ddp
     ports:
       - "443:443"
       - "8080:8080"
@@ -234,7 +261,7 @@ services:
         condition: service_started
       ddp-atlas:
         condition: service_started
-    # entrypoint: tail --pid=1 -F /dev/null
+    entrypoint: /ddp/scripts/starburst/starburst.sh
   ddp-zookeeper:
     build:
       context: .
