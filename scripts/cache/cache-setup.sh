@@ -21,7 +21,7 @@ set -xe
 mkdir -p /etc/sep/catalog
 cd ${CACHE_HOME} && ln -s /etc/sep etc
 
-cp ${CACHE_DIST}/starburstdata.license /etc/sep/starburstdata.license
+cp ${DOWNLOADS}/starburstdata.license /etc/sep/starburstdata.license
 
 cat <<EOF > ${CACHE_HOME}/etc/config.properties
 service-database.user=cache
@@ -30,12 +30,38 @@ service-database.jdbc-url=jdbc:postgresql://ddp-postgres.example.com/redirection
 starburst.user=ddp
 starburst.jdbc-url=jdbc:trino://ddp-starburst.example.com:8080
 rules.file=etc/rules.json
+# it requires 358-e
+# type-mapping=FILE
+# type-mapping.file=etc/type-mapping.json
 EOF
 
-# You can find it in the manual starting from Starburst 358-e.
 cat <<EOF > ${CACHE_HOME}/etc/rules.json
 {
   "rules": []
+}
+EOF
+
+# You can find it in the manual starting from Starburst 358-e.
+cat <<EOF > ${CACHE_HOME}/etc/type-mapping.json
+{
+  "rules": {
+    "delta": {
+      "timestamp(0)": "timestamp(3)",
+      "timestamp(1)": "timestamp(3)",
+      "timestamp(2)": "timestamp(3)",
+      "timestamp(4)": "timestamp(3)",
+      "timestamp(5)": "timestamp(3)",
+      "timestamp(6)": "timestamp(3)"
+    }
+    "hive": {
+      "timestamp(0)": "timestamp(3)",
+      "timestamp(1)": "timestamp(3)",
+      "timestamp(2)": "timestamp(3)",
+      "timestamp(4)": "timestamp(3)",
+      "timestamp(5)": "timestamp(3)",
+      "timestamp(6)": "timestamp(3)"
+    }
+  }
 }
 EOF
 

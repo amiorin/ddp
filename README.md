@@ -204,6 +204,12 @@ starburst-cache-cli cache \
   --source postgres_event_logger.public.query_tables \
   --target-catalog hive \
   --target-schema default
+
+starburst-cache-cli cache \
+  --cache-ttl 1h \
+  --source postgres_event_logger.public.cluster_metrics \
+  --target-catalog delta \
+  --target-schema default
 ```
 
 ## Containers

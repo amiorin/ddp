@@ -18,15 +18,8 @@
 
 set -xe
 
-export CACHE_HOME=/opt/starburst-cache-service
-export SCRIPTS=$(dirname "$0")
-
-if [ ! -e ${CACHE_HOME}/.setupDone ]
-then
-  ${SCRIPTS}/cache-install.sh
-  ${SCRIPTS}/cache-setup.sh
-  su -c "touch ${CACHE_HOME}/.setupDone" starburst
-fi
-
-# start 
-exec su -c "cd ${CACHE_HOME} && ./bin/launcher run" starburst
+mkdir -p $CACHE_HOME
+tar zxf ${DOWNLOADS}/starburst-cache-service-356-e.5.tar.gz --directory=${CACHE_HOME} --strip 1
+dpkg -i ${DOWNLOADS}/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb
+cp ${DOWNLOADS}/starburst-cache-cli-356-e.5-executable.jar /usr/local/bin/starburst-cache-cli
+chown -R starburst:starburst ${CACHE_HOME}/

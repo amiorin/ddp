@@ -3,7 +3,7 @@ services:
   ddp-cache:
     build:
       context: .
-      dockerfile: Dockerfile.ddp-cache
+      dockerfile: Dockerfile.ddp-base
       args:
         - STARBURST_VERSION=${STARBURST_VERSION}
     image: ddp-cache:latest
@@ -15,6 +15,10 @@ services:
       - "8180:8180"
     environment:
       - STARBURST_VERSION
+      - DOWNLOADS=/ddp/downloads
+    volumes:
+      - ${PWD}:/ddp
+    entrypoint: /ddp/scripts/cache/cache.sh
   ddp-ranger:
     build:
       context: .
@@ -219,11 +223,11 @@ services:
     networks:
       - ddp
     environment:
-    - STARBURST_VERSION
-    - HTTPS_PORT=1443
-    - HTTP_PORT=18080
-    - NAME=marketing
-    - DOWNLOADS=/ddp/downloads
+      - STARBURST_VERSION
+      - HTTPS_PORT=1443
+      - HTTP_PORT=18080
+      - NAME=marketing
+      - DOWNLOADS=/ddp/downloads
     volumes:
       - ${PWD}:/ddp
     ports:
@@ -242,11 +246,11 @@ services:
     networks:
       - ddp
     environment:
-    - STARBURST_VERSION
-    - HTTPS_PORT=443
-    - HTTP_PORT=8080
-    - NAME=starburst
-    - DOWNLOADS=/ddp/downloads
+      - STARBURST_VERSION
+      - HTTPS_PORT=443
+      - HTTP_PORT=8080
+      - NAME=starburst
+      - DOWNLOADS=/ddp/downloads
     volumes:
       - ${PWD}:/ddp
     ports:
