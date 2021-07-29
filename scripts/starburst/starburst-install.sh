@@ -19,5 +19,6 @@
 set -xe
 
 tar zxf ${DOWNLOADS}/starburst-enterprise-${STARBURST_VERSION}.tar.gz --directory=${STARBURST_HOME} --strip 1
+cp ${DOWNLOADS}/starburst-ranger-cli-359-e-executable.jar /usr/local/bin/starburst-ranger-cli
 dpkg -i ${DOWNLOADS}/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb
 chown -R starburst:starburst ${STARBURST_HOME}/

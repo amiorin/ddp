@@ -72,7 +72,7 @@ EOF
 starburst-ranger-cli service-definition starburst create \
   --properties=${STARBURST_HOME}/etc/access-control-ranger.properties || true
 
-python3 ${STARBURST_SCRIPTS}/ranger-service-starburst-enterprise.py || true
+python3 ${SCRIPTS}/ranger-service-starburst-enterprise.py || true
 
 # while ! nc -z ddp-atlas.example.com 21000; do   
 #   sleep 1
