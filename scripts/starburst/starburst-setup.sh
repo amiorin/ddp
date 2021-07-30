@@ -210,7 +210,7 @@ EOF
 
 fi
 
-cat <<EOF > ${STARBURST_HOME}/etc/catalog/glabal.properties
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/global.properties
 connector.name=delta-lake
 hive.metastore.uri=thrift://ddp-hive.example.com:9083
 hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
