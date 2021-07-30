@@ -124,20 +124,13 @@ bin/kafka-console-consumer.sh --topic ATLAS_ENTITIES --from-beginning --bootstra
 
 ```sh
 # Fast container rebuild
-docker-compose build ddp-base && \
-docker-compose up -d && \
-docker-compose logs -f
-# rebuild ddp-atlas only
-export SERVICE=ddp-starburst && \
-docker-compose stop $SERVICE && \
-docker-compose build --no-cache $SERVICE && \
-docker-compose up -d --no-deps && \
-docker-compose logs -f $SERVICE
+docker-compose build ddp-base && docker-compose up
+# rebuild ddp-starburst only
+docker-compose up --no-deps --force-recreate ddp-starburst
 # shell in the service under developement
 docker exec -it --privileged $SERVICE bash
 # shutdown and clean up
-docker-compose down && \
-docker system prune -af
+docker-compose down && docker system prune -af
 ```
 
 ```sql

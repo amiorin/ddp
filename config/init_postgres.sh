@@ -35,4 +35,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     CREATE USER cache WITH PASSWORD 'ddpR0cks!';
     CREATE DATABASE redirections;
     GRANT ALL PRIVILEGES ON DATABASE redirections TO cache;
+
+    CREATE DATABASE redirections2;
+    GRANT ALL PRIVILEGES ON DATABASE redirections2 TO cache;
 EOSQL

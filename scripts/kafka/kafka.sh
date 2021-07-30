@@ -36,4 +36,4 @@ su -c "mkdir -p /opt/kafka/logs" kafka
 su -c "touch /opt/kafka/logs/server.log" kafka
 
 # prevent the container from exiting
-tail --pid=${KAFKA_PID} -F /opt/kafka/logs/server.log
+exec tail --pid=${KAFKA_PID} -F /opt/kafka/logs/server.log

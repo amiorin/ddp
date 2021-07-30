@@ -122,6 +122,9 @@ cat <<EOF > ${STARBURST_HOME}/etc/catalog/tpcds.properties
 connector.name=tpcds
 EOF
 
+
+if [[ "${NAME}" == "starburst" ]]; then
+
 for i in event_logger hive ranger redirections
 do
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/postgres_${i}.properties
@@ -153,6 +156,35 @@ delta.hive-catalog-name=hive
 # redirection.config-source=SERVICE
 # cache-service.uri=http://ddp-cache.example.com:8180
 EOF
+
+elif [[ "${NAME}" == "marketing" ]]; then
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/hive.properties
+connector.name=stargate
+connection-url=jdbc:trino://ddp-starburst.example.com:443/hive
+connection-user=ddp
+connection-password=ddpR0cks!
+ssl.enabled=true
+ssl.truststore.path=etc/keystore.jks
+ssl.truststore.password=changeit
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache2.example.com:8180
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/delta.properties
+connector.name=stargate
+connection-url=jdbc:trino://ddp-starburst.example.com:443/delta
+connection-user=ddp
+connection-password=ddpR0cks!
+ssl.enabled=true
+ssl.truststore.path=etc/keystore.jks
+ssl.truststore.password=changeit
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache2.example.com:8180
+EOF
+
+fi
+
 
 cat <<EOF > ${STARBURST_HOME}/etc/core-site.xml
 <configuration>

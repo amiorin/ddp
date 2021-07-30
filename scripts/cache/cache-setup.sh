@@ -26,9 +26,9 @@ cp ${DOWNLOADS}/starburstdata.license /etc/sep/starburstdata.license
 cat <<EOF > ${CACHE_HOME}/etc/config.properties
 service-database.user=cache
 service-database.password=ddpR0cks!
-service-database.jdbc-url=jdbc:postgresql://ddp-postgres.example.com/redirections
+service-database.jdbc-url=jdbc:postgresql://ddp-postgres.example.com/${DATABASE}
 starburst.user=ddp
-starburst.jdbc-url=jdbc:trino://ddp-starburst.example.com:8080
+starburst.jdbc-url=jdbc:trino://${TRINO}.example.com:8080
 rules.file=etc/rules.json
 # it requires 358-e
 # type-mapping=FILE

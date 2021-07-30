@@ -4,8 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.ddp-base
-      args:
-        - STARBURST_VERSION=${STARBURST_VERSION}
     image: ddp-cache:latest
     container_name: ddp-cache
     hostname: ddp-cache.example.com
@@ -16,6 +14,27 @@ services:
     environment:
       - STARBURST_VERSION
       - DOWNLOADS=/ddp/downloads
+      - TRINO=ddp-starburst
+      - DATABASE=redirections
+    volumes:
+      - ${PWD}:/ddp
+    entrypoint: /ddp/scripts/cache/cache.sh
+  ddp-cache2:
+    build:
+      context: .
+      dockerfile: Dockerfile.ddp-base
+    image: ddp-cache2:latest
+    container_name: ddp-cache2
+    hostname: ddp-cache2.example.com
+    networks:
+      - ddp
+    ports:
+      - "18180:8180"
+    environment:
+      - STARBURST_VERSION
+      - DOWNLOADS=/ddp/downloads
+      - TRINO=ddp-marketing
+      - DATABASE=redirections2
     volumes:
       - ${PWD}:/ddp
     entrypoint: /ddp/scripts/cache/cache.sh
@@ -224,15 +243,15 @@ services:
       - ddp
     environment:
       - STARBURST_VERSION
-      - HTTPS_PORT=1443
-      - HTTP_PORT=18080
+      - HTTPS_PORT=443
+      - HTTP_PORT=8080
       - NAME=marketing
       - DOWNLOADS=/ddp/downloads
     volumes:
       - ${PWD}:/ddp
     ports:
-      - "1443:1443"
-      - "18080:18080"
+      - "1443:443"
+      - "18080:8080"
     entrypoint: /ddp/scripts/starburst/starburst.sh
   ddp-starburst:
     build:
