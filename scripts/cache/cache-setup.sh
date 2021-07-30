@@ -31,8 +31,8 @@ starburst.user=ddp
 starburst.jdbc-url=jdbc:trino://${TRINO}.example.com:8080
 rules.file=etc/rules.json
 # it requires 358-e
-# type-mapping=FILE
-# type-mapping.file=etc/type-mapping.json
+type-mapping=FILE
+type-mapping.file=etc/type-mapping.json
 EOF
 
 cat <<EOF > ${CACHE_HOME}/etc/rules.json

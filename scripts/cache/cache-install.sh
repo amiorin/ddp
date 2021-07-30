@@ -19,7 +19,7 @@
 set -xe
 
 mkdir -p $CACHE_HOME
-tar zxf ${DOWNLOADS}/starburst-cache-service-356-e.5.tar.gz --directory=${CACHE_HOME} --strip 1
+tar zxf ${DOWNLOADS}/starburst-cache-service-${STARBURST_VERSION}.tar.gz --directory=${CACHE_HOME} --strip 1
 dpkg -i ${DOWNLOADS}/zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb
-cp ${DOWNLOADS}/starburst-cache-cli-356-e.5-executable.jar /usr/local/bin/starburst-cache-cli
+cp ${DOWNLOADS}/starburst-cache-cli-${STARBURST_VERSION}-executable.jar /usr/local/bin/starburst-cache-cli
 chown -R starburst:starburst ${CACHE_HOME}/

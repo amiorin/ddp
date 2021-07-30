@@ -59,7 +59,7 @@ The Docker files in this folder create docker images and run them to build Apach
        apache-atlas-3.0.0-SNAPSHOT-hive-hook.tar.gz
        apache-atlas-3.0.0-SNAPSHOT-server.tar.gz
 
-1. Update environment variables in .env file, if necessary
+1. Create an ```.env``` file starting from ```.env.template```. You need two AWS accounts and you need to setup the credentials in two different profiles.
 
 1. Request a trial license to Starburst https://www.starburst.io/
 
@@ -72,16 +72,22 @@ The Docker files in this folder create docker images and run them to build Apach
 1. Some files needs to be copied manually. The content of ```./downloads``` must be like this:
 
        apache-hive-3.1.2-bin.tar.gz
+       commons-compress-1.8.1.jar
+       commons-lang3-3.3.2.jar
        hadoop-3.1.0.tar.gz
        hadoop-3.3.1.tar.gz
        hbase-2.3.3-bin.tar.gz
        kafka_2.12-2.8.0.tgz
        postgresql-42.2.16.jre7.jar
-       starburst-enterprise-356-e.5.tar.gz
-       starburst-ranger-cli-356-e.5-executable.jar
-       starburst-ranger-plugin-2.0.51.jar
+       starburst-atlas-cli-359-e-executable.jar
+       starburst-cache-cli-359-e-executable.jar
+       starburst-cache-service-359-e.tar.gz
+       starburst-enterprise-359-e.tar.gz
+       starburst-ranger-cli-359-e-executable.jar
+       starburst-ranger-plugin-2.1.0-e.7.jar
        starburstdata.license
-       trino-jdbc-356-e.5.jar
+       trino-cli-359-executable.jar
+       trino-jdbc-359-e.jar
        zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb
 
 1. Execute following command to start Starburst Trino:
@@ -155,7 +161,7 @@ starburst-atlas-cli catalog register --server=${ATLAS_URL} \
 
 ```
 
-```
+```sql
 CREATE TABLE hive.default.item3 (
    i_item_sk bigint,
    i_item_id char(16),
@@ -196,6 +202,12 @@ starburst-cache-cli cache \
   --cache-ttl 1h \
   --source postgres_event_logger.public.query_tables \
   --target-catalog hive \
+  --target-schema default
+
+starburst-cache-cli cache \
+  --cache-ttl 1h \
+  --source postgres_event_logger.public.cluster_metrics \
+  --target-catalog delta \
   --target-schema default
 
 starburst-cache-cli cache \

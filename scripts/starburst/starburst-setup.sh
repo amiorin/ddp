@@ -122,8 +122,30 @@ cat <<EOF > ${STARBURST_HOME}/etc/catalog/tpcds.properties
 connector.name=tpcds
 EOF
 
-
 if [[ "${NAME}" == "starburst" ]]; then
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/marketing.properties
+connector.name=stargate
+connection-url=jdbc:trino://ddp-marketing.example.com:443/marketing
+connection-user=ddp
+connection-password=ddpR0cks!
+ssl.enabled=true
+ssl.truststore.path=etc/keystore.jks
+ssl.truststore.password=changeit
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache.example.com:8180
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/starburst.properties
+connector.name=hive
+hive.metastore=glue
+hive.security=allow-all
+hive.metastore.glue.region=eu-central-1
+hive.metastore.glue.catalogid=${AWS_ACCOUNT}
+hive.metastore.glue.default-warehouse-dir=s3://amiorin-s3-int/domains/starburst/
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache.example.com:8180
+EOF
 
 for i in event_logger hive ranger redirections
 do
@@ -137,27 +159,30 @@ cache-service.uri=http://ddp-cache.example.com:8180
 EOF
 done
 
-cat <<EOF > ${STARBURST_HOME}/etc/catalog/hive.properties
-connector.name=hive
-hive.metastore.uri=thrift://ddp-hive.example.com:9083
-hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
-hive.security=allow-all
-redirection.config-source=SERVICE
-cache-service.uri=http://ddp-cache.example.com:8180
-EOF
-
-cat <<EOF > ${STARBURST_HOME}/etc/catalog/delta.properties
-connector.name=delta-lake
-hive.metastore.uri=thrift://ddp-hive.example.com:9083
-hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
-hive.security=allow-all
-delta.hive-catalog-name=hive
-# not supported yet
-# redirection.config-source=SERVICE
-# cache-service.uri=http://ddp-cache.example.com:8180
-EOF
-
 elif [[ "${NAME}" == "marketing" ]]; then
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/marketing.properties
+connector.name=hive
+hive.metastore=glue
+hive.security=allow-all
+hive.metastore.glue.region=eu-central-1
+hive.metastore.glue.catalogid=${AWS_ACCOUNT}
+hive.metastore.glue.default-warehouse-dir=s3://amiorin-s3-int/domains/marketing/
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache2.example.com:8180
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/starburst.properties
+connector.name=stargate
+connection-url=jdbc:trino://ddp-starburst.example.com:443/starburst
+connection-user=ddp
+connection-password=ddpR0cks!
+ssl.enabled=true
+ssl.truststore.path=etc/keystore.jks
+ssl.truststore.password=changeit
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache2.example.com:8180
+EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/hive.properties
 connector.name=stargate
@@ -185,6 +210,15 @@ EOF
 
 fi
 
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/glabal.properties
+connector.name=delta-lake
+hive.metastore.uri=thrift://ddp-hive.example.com:9083
+hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
+hive.security=allow-all
+# not supported yet
+# redirection.config-source=SERVICE
+# cache-service.uri=http://ddp-cache.example.com:8180
+EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/core-site.xml
 <configuration>

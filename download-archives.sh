@@ -45,7 +45,7 @@ downloadIfNotPresent() {
 
 downloadIfNotPresent hadoop-${HADOOP_VERSION}.tar.gz                  https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}
 downloadIfNotPresent zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb       https://cdn.azul.com/zulu/bin
-downloadIfNotPresent starburst-enterprise-${STARBURST_VERSION}.tar.gz https://s3.us-east-2.amazonaws.com/software.starburstdata.net/356e/${STARBURST_VERSION}
+downloadIfNotPresent starburst-enterprise-${STARBURST_VERSION}.tar.gz https://s3.us-east-2.amazonaws.com/software.starburstdata.net/359e/${STARBURST_VERSION}
 downloadIfNotPresent kafka_2.12-${KAFKA_VERSION}.tgz                  https://archive.apache.org/dist/kafka/${KAFKA_VERSION}
 downloadIfNotPresent apache-hive-${HIVE_VERSION}-bin.tar.gz           https://archive.apache.org/dist/hive/hive-${HIVE_VERSION}
 downloadIfNotPresent hadoop-${HIVE_HADOOP_VERSION}.tar.gz             https://archive.apache.org/dist/hadoop/common/hadoop-${HIVE_HADOOP_VERSION}

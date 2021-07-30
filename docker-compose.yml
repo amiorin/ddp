@@ -247,8 +247,11 @@ services:
       - HTTP_PORT=8080
       - NAME=marketing
       - DOWNLOADS=/ddp/downloads
+      - AWS_PROFILE=${AWS_PROFILE_MARKETING}
+      - AWS_ACCOUNT=${AWS_ACCOUNT_MARKETING}
     volumes:
       - ${PWD}:/ddp
+      - ${HOME}/.aws:/home/starburst/.aws
     ports:
       - "1443:443"
       - "18080:8080"
@@ -270,8 +273,11 @@ services:
       - HTTP_PORT=8080
       - NAME=starburst
       - DOWNLOADS=/ddp/downloads
+      - AWS_PROFILE=${AWS_PROFILE_STARBURST}
+      - AWS_ACCOUNT=${AWS_ACCOUNT_STARBURST}
     volumes:
       - ${PWD}:/ddp
+      - ${HOME}/.aws:/home/starburst/.aws
     ports:
       - "443:443"
       - "8080:8080"
