@@ -23,7 +23,7 @@ Docker Data Platform is a Query Fabric sandbox that runs on you computer. A Quer
    * **Structured.** The Query Fabric is not a Data Lake but it leverages the technology of the Data Lakes like S3 or HDFS.
    * **Secured at scale.** Scalable security is achieved with RBAC and ABAC. Users are not granted SELECT to the single table but to the attribute and the attribute is associated with the columns. Column lineage allows these attributes to propagate automatically.
    * **Without data movement.** Data movement is an anti-pattern in data. Usually metadata is lost during the data movement. Query Fabric advocate for a semantic layer declined per domain made with views.
-   * **Queryable at scale** Table redirections and local caching provide the performance without creating duplicates in the catalog of assets.
+   * **Queryable at scale.** Table redirections and local caching provide the performance without creating duplicates in the catalog of assets.
    * **One SQL.** The underline SQL dialects of the different databases is creating friction. A lot of cleaning of data is done with SQL views that are not portable. In a Query Fabric there is only one SQL and all views are defined in one language.
    * **Forever.** SQL is almost 50 years old but every company has legacy databases. Using a Query Fabric on top of the physical databases will make the phase out of legacy databases much easier because it doesn't require a migration of the SQL code written by users.
 
@@ -76,7 +76,7 @@ Docker Data Platform is a Query Fabric sandbox that runs on you computer. A Quer
 1. Starburst Trino cli ```trino-cli --server=https://localhost --insecure --password --user ddp``` (ddp/ddpR0cks!)
 
 ## Web
-* Generic domain
+* Sales domain (main domain)
    * Starburst https://localhost/ui
    * Starburst https://localhost/ui/insights
    * Starburst http://localhost:8080/ui
@@ -107,8 +107,8 @@ bin/kafka-console-consumer.sh --topic ATLAS_ENTITIES --from-beginning --bootstra
 ```sh
 # Fast container rebuild
 docker-compose build ddp-base && docker-compose up
-# rebuild ddp-starburst only
-docker-compose up --no-deps --force-recreate ddp-starburst
+# rebuild ddp-sales only
+docker-compose up --no-deps --force-recreate ddp-sales
 # shell in the service under developement
 docker exec -it --privileged $SERVICE bash
 # shutdown and clean up
@@ -130,12 +130,12 @@ GRANT ALL PRIVILEGES ON DATABASE redirections2 TO cache;
 ```bash
 # Starburst Atlas integration
 export ATLAS_URL=http://ddp-atlas.example.com:21000
-export STARBURST_HOST=ddp-starburst.example.com:8080
+export STARBURST_HOST=ddp-sales.example.com:8080
 starburst-atlas-cli types create --server=${ATLAS_URL} --user admin --password
-starburst-atlas-cli cluster register --server=${ATLAS_URL} --user=admin --password --cluster-name=ddp-starburst.example.com
+starburst-atlas-cli cluster register --server=${ATLAS_URL} --user=admin --password --cluster-name=ddp-sales.example.com
 starburst-atlas-cli catalog register --server=${ATLAS_URL} \
 --user admin --password \
---cluster-name ddp-starburst \
+--cluster-name ddp-sales\
 --catalog tpcds \
 --starburst-jdbc-url "jdbc:trino://${STARBURST_HOST}?user=ddp"
 ```

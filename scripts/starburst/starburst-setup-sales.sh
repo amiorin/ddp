@@ -30,7 +30,7 @@ redirection.config-source=SERVICE
 cache-service.uri=http://ddp-cache.example.com:8180
 EOF
 
-cat <<EOF > ${STARBURST_HOME}/etc/catalog/starburst.properties
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/sales.properties
 connector.name=hive
 hive.metastore=glue
 hive.security=allow-all

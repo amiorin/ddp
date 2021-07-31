@@ -14,7 +14,7 @@ services:
     environment:
       - STARBURST_VERSION
       - DOWNLOADS=/ddp/downloads
-      - TRINO=ddp-starburst
+      - TRINO=ddp-sales
       - DATABASE=redirections
     volumes:
       - ${PWD}:/ddp
@@ -260,22 +260,22 @@ services:
       - "1443:443"
       - "18080:8080"
     entrypoint: /ddp/scripts/starburst/starburst.sh
-  ddp-starburst:
+  ddp-sales:
     build:
       context: .
       dockerfile: Dockerfile.ddp-base
       args:
         - STARBURST_VERSION=${STARBURST_VERSION}
-    image: ddp-starburst:latest
-    container_name: ddp-starburst
-    hostname: ddp-starburst.example.com
+    image: ddp-sales:latest
+    container_name: ddp-sales
+    hostname: ddp-sales.example.com
     networks:
       - ddp
     environment:
       - STARBURST_VERSION
       - HTTPS_PORT=443
       - HTTP_PORT=8080
-      - NAME=starburst
+      - NAME=sales
       - DOWNLOADS=/ddp/downloads
       - AWS_PROFILE=${AWS_PROFILE_STARBURST}
       - AWS_ACCOUNT=${AWS_ACCOUNT_STARBURST}

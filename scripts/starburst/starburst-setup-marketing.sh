@@ -29,9 +29,9 @@ redirection.config-source=SERVICE
 cache-service.uri=http://ddp-cache2.example.com:8180
 EOF
 
-cat <<EOF > ${STARBURST_HOME}/etc/catalog/starburst.properties
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/sales.properties
 connector.name=stargate
-connection-url=jdbc:trino://ddp-starburst.example.com:443/starburst
+connection-url=jdbc:trino://ddp-sales.example.com:443/sales
 connection-user=ddp
 connection-password=ddpR0cks!
 ssl.enabled=true
