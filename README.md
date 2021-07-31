@@ -144,6 +144,11 @@ docker-compose down && docker system prune -af
 DROP DATABASE ranger;
 CREATE DATABASE ranger;
 GRANT ALL PRIVILEGES ON DATABASE ranger TO rangeradmin;
+
+-- cache2
+DROP DATABASE redirections2;
+CREATE DATABASE redirections2;
+GRANT ALL PRIVILEGES ON DATABASE redirections2 TO cache;
 ```
 
 ```bash
@@ -212,9 +217,13 @@ starburst-cache-cli cache \
 
 starburst-cache-cli cache \
   --cache-ttl 1h \
-  --source postgres_event_logger.public.cluster_metrics \
-  --target-catalog delta \
+  --source marketing.default.item \
+  --target-catalog global \
   --target-schema default
+```
+
+```sql
+CREATE OR REPLACE VIEW global.starburst.item SECURITY INVOKER AS SELECT * FROM starburst.default.item
 ```
 
 ## Containers

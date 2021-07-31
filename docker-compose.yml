@@ -75,8 +75,6 @@ services:
     hostname: ddp-atlas.example.com
     networks:
       - ddp
-    volumes:
-      - ./data:/home/atlas/data
     ports:
       - "21000:21000"
     depends_on:
@@ -128,6 +126,7 @@ services:
       start_period: 40s
     environment:
       - HADOOP_VERSION
+      - HADOOP_HEAPSIZE=256M
     # entrypoint: tail -F /opt/hadoop/logs/hadoop-hdfs-namenode-ddp-hadoop.example.com.log
   ddp-hbase:
     build:
@@ -217,6 +216,10 @@ services:
         - ddp
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=ddpR0cks!
+    volumes:
+      - ${PWD}/scripts/postgres/:/docker-entrypoint-initdb.d/
   ddp-solr:
     build:
       context: .
@@ -249,6 +252,7 @@ services:
       - DOWNLOADS=/ddp/downloads
       - AWS_PROFILE=${AWS_PROFILE_MARKETING}
       - AWS_ACCOUNT=${AWS_ACCOUNT_MARKETING}
+      - AWS_BUCKET=${AWS_BUCKET_MARKETING}
     volumes:
       - ${PWD}:/ddp
       - ${HOME}/.aws:/home/starburst/.aws
@@ -275,6 +279,7 @@ services:
       - DOWNLOADS=/ddp/downloads
       - AWS_PROFILE=${AWS_PROFILE_STARBURST}
       - AWS_ACCOUNT=${AWS_ACCOUNT_STARBURST}
+      - AWS_BUCKET=${AWS_BUCKET_STARBURST}
     volumes:
       - ${PWD}:/ddp
       - ${HOME}/.aws:/home/starburst/.aws

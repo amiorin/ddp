@@ -31,8 +31,8 @@ starburst.user=ddp
 starburst.jdbc-url=jdbc:trino://${TRINO}.example.com:8080
 rules.file=etc/rules.json
 # it requires 358-e
-type-mapping=FILE
-type-mapping.file=etc/type-mapping.json
+# type-mapping=FILE
+# type-mapping.file=etc/type-mapping.json
 EOF
 
 cat <<EOF > ${CACHE_HOME}/etc/rules.json
@@ -46,19 +46,9 @@ cat <<EOF > ${CACHE_HOME}/etc/type-mapping.json
 {
   "rules": {
     "delta": {
-      "timestamp(0)": "timestamp(3)",
-      "timestamp(1)": "timestamp(3)",
-      "timestamp(2)": "timestamp(3)",
-      "timestamp(4)": "timestamp(3)",
-      "timestamp(5)": "timestamp(3)",
       "timestamp(6)": "timestamp(3)"
     }
     "hive": {
-      "timestamp(0)": "timestamp(3)",
-      "timestamp(1)": "timestamp(3)",
-      "timestamp(2)": "timestamp(3)",
-      "timestamp(4)": "timestamp(3)",
-      "timestamp(5)": "timestamp(3)",
       "timestamp(6)": "timestamp(3)"
     }
   }
@@ -67,7 +57,7 @@ EOF
 
 cat <<EOF > ${CACHE_HOME}/etc/jvm.config
 -server
--Xmx512M
+-Xmx256M
 -XX:+ExitOnOutOfMemoryError
 -XX:+HeapDumpOnOutOfMemoryError
 EOF

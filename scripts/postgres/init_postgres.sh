@@ -17,7 +17,7 @@
 # limitations under the License.
 
 
-set -e
+set -xe
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
     CREATE USER starburst_insights WITH PASSWORD 'ddpR0cks!';

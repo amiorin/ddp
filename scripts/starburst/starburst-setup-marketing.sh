@@ -18,16 +18,25 @@
 
 set -xe
 
-export SCRIPTS=$(dirname "$0")
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/marketing.properties
+connector.name=hive
+hive.metastore=glue
+hive.security=allow-all
+hive.metastore.glue.region=eu-central-1
+hive.metastore.glue.catalogid=${AWS_ACCOUNT}
+hive.metastore.glue.default-warehouse-dir=${AWS_BUCKET}
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache2.example.com:8180
+EOF
 
-if [ ! -e ${STARBURST_HOME}/.setupDone ]
-then
-  $SCRIPTS/starburst-install.sh
-  $SCRIPTS/starburst-setup.sh
-  $SCRIPTS/starburst-setup-${NAME}.sh
-  chown -R starburst:starburst ${STARBURST_HOME}/
-  su -c "touch ${STARBURST_HOME}/.setupDone" starburst
-fi
-
-# start 
-exec su starburst -c "cd ${STARBURST_HOME} && ./bin/launcher run"
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/starburst.properties
+connector.name=stargate
+connection-url=jdbc:trino://ddp-starburst.example.com:443/starburst
+connection-user=ddp
+connection-password=ddpR0cks!
+ssl.enabled=true
+ssl.truststore.path=etc/keystore.jks
+ssl.truststore.password=changeit
+redirection.config-source=SERVICE
+cache-service.uri=http://ddp-cache2.example.com:8180
+EOF
