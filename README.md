@@ -18,46 +18,21 @@ under the License.
 -->
 
 ## Overview
-The Docker files in this folder create docker images and run them to build Apache Ranger and Atlas, package Starburst Trino, and deploy all them together with the dependent services in containers.
+Docker Data Platform is a Query Fabric sandbox that runs on you computer. A Query Fabric is reusing the ideas of Data Lake, Query Federation, and Data Mesh.
+* All the structured data of a company secured in one place without data movement and queryable with one SQL at scale and forever.
+   * **Structured.** The Query Fabric is not a Data Lake but it leverages the technology of the Data Lakes like S3 or HDFS.
+   * **Secured at scale.** Scalable security is achieved with RBAC and ABAC. Users are not granted SELECT to the single table but to the attribute and the attribute is associated with the columns. Column lineage allows these attributes to propagate automatically.
+   * **Data movement at scale.** Data movement is an anti-pattern in data. Usually metadata is lost during the data movement. Query Fabric advocate for a semantic layer declined per domain made with views. Table redirections and local caching provide the performance without creating duplicates in the catalog of assets.
+   * **One SQL.** The underline SQL dialects of the different databases is creating friction. A lot of cleaning of data is done with SQL views that are not portable. In a Query Fabric there is only one SQL and all views are defined in one language.
+   * **Forever.** SQL is almost 50 years old but every company has legacy databases. Using a Query Fabric on top of the physical databases will make the phase out of legacy databases much easier because it doesn't require a migration of the SQL code written by users.
 
 ## Usage
 1. Ensure that you have recent version of Docker installed from [docker.io](http://www.docker.io) (as of this writing: Engine 20.10.5, Compose 1.28.5).
-   Make sure to configure docker with at least 8gb of memory.
+   Make sure to configure docker with at least 8gb of memory. Increase the Docker memory if see containers killed.
 
 1. Set this folder as your working directory.
 
-1. Build and copy the Apache Ranger files from https://github.com/apache/ranger/tree/master/dev-support/ranger-docker to ./dist/ranger
-    
-       ranger-3.0.0-SNAPSHOT-admin.tar.gz
-       ranger-3.0.0-SNAPSHOT-atlas-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-elasticsearch-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-hbase-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-hdfs-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-hive-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-kafka-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-kms.tar.gz
-       ranger-3.0.0-SNAPSHOT-knox-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-kylin-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-migration-util.tar.gz
-       ranger-3.0.0-SNAPSHOT-ozone-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-presto-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-ranger-tools.tar.gz
-       ranger-3.0.0-SNAPSHOT-schema-registry-plugin.jar
-       ranger-3.0.0-SNAPSHOT-solr-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-solr_audit_conf.tar.gz
-       ranger-3.0.0-SNAPSHOT-solr_audit_conf.zip
-       ranger-3.0.0-SNAPSHOT-sqoop-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-src.tar.gz
-       ranger-3.0.0-SNAPSHOT-storm-plugin.tar.gz
-       ranger-3.0.0-SNAPSHOT-tagsync.tar.gz
-       ranger-3.0.0-SNAPSHOT-usersync.tar.gz
-       ranger-3.0.0-SNAPSHOT-yarn-plugin.tar.gz
-
-1. Build and copy the Apache Atlas files from https://github.com/apache/atlas/tree/master/dev-support/atlas-docker to ./dist/atlas
-
-       apache-atlas-3.0.0-SNAPSHOT-hbase-hook.tar.gz
-       apache-atlas-3.0.0-SNAPSHOT-hive-hook.tar.gz
-       apache-atlas-3.0.0-SNAPSHOT-server.tar.gz
+1. Create 2 AWS accounts with 2 buckets.
 
 1. Create an ```.env``` file starting from ```.env.template```. You need two AWS accounts and you need to setup the credentials in two different profiles.
 
@@ -92,7 +67,7 @@ The Docker files in this folder create docker images and run them to build Apach
 
 1. Execute following command to start Starburst Trino:
 
-       docker-compose up
+       docker-compose build ddp-base && docker-compose up
 
 1. Starburst Trino can be accessed at https://localhost/ui (ddp/ddpR0cks!) or https://localhost/ui/insights
    Paste chrome://flags/#allow-insecure-localhost to fix the certificate problem.
@@ -162,8 +137,6 @@ starburst-atlas-cli catalog register --server=${ATLAS_URL} \
 --cluster-name ddp-starburst \
 --catalog tpcds \
 --starburst-jdbc-url "jdbc:trino://${STARBURST_HOST}?user=ddp"
-
-
 ```
 
 ```sql
@@ -218,6 +191,12 @@ starburst-cache-cli cache \
 starburst-cache-cli cache \
   --cache-ttl 1h \
   --source marketing.default.item \
+  --target-catalog global \
+  --target-schema default
+
+starburst-cache-cli cache \
+  --cache-ttl 1h \
+  --source starburst.default.item \
   --target-catalog global \
   --target-schema default
 ```

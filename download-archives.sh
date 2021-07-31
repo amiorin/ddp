@@ -30,27 +30,36 @@ source .env
 
 
 downloadIfNotPresent() {
-  local fileName=$1
-  local urlBase=$2
+  local dirName=$1
+  local fileName=$2
+  local urlBase=$3
 
-  if [ ! -f "downloads/${fileName}" ]
+  if [ ! -f "${dirName}/${fileName}" ]
   then
     echo "downloading ${urlBase}/${fileName}.."
 
-    curl -L ${urlBase}/${fileName} --output downloads/${fileName}
+    curl -L ${urlBase}/${fileName} --output ${dirName}/${fileName}
   else
     echo "file already in cache: ${fileName}"
   fi
 }
 
-downloadIfNotPresent hadoop-${HADOOP_VERSION}.tar.gz                  https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}
-downloadIfNotPresent zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb       https://cdn.azul.com/zulu/bin
-downloadIfNotPresent starburst-enterprise-${STARBURST_VERSION}.tar.gz https://s3.us-east-2.amazonaws.com/software.starburstdata.net/359e/${STARBURST_VERSION}
-downloadIfNotPresent kafka_2.12-${KAFKA_VERSION}.tgz                  https://archive.apache.org/dist/kafka/${KAFKA_VERSION}
-downloadIfNotPresent apache-hive-${HIVE_VERSION}-bin.tar.gz           https://archive.apache.org/dist/hive/hive-${HIVE_VERSION}
-downloadIfNotPresent hadoop-${HIVE_HADOOP_VERSION}.tar.gz             https://archive.apache.org/dist/hadoop/common/hadoop-${HIVE_HADOOP_VERSION}
-downloadIfNotPresent hbase-${HBASE_VERSION}-bin.tar.gz                https://archive.apache.org/dist/hbase/${HBASE_VERSION}
-downloadIfNotPresent postgresql-42.2.16.jre7.jar                      https://search.maven.org/remotecontent?filepath=org/postgresql/postgresql/42.2.16.jre7
+downloadIfNotPresent downloads hadoop-${HADOOP_VERSION}.tar.gz                  https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}
+downloadIfNotPresent downloads zulu11.48.21-ca-jdk11.0.11-linux_amd64.deb       https://cdn.azul.com/zulu/bin
+downloadIfNotPresent downloads starburst-enterprise-${STARBURST_VERSION}.tar.gz https://s3.us-east-2.amazonaws.com/software.starburstdata.net/359e/${STARBURST_VERSION}
+downloadIfNotPresent downloads kafka_2.12-${KAFKA_VERSION}.tgz                  https://archive.apache.org/dist/kafka/${KAFKA_VERSION}
+downloadIfNotPresent downloads apache-hive-${HIVE_VERSION}-bin.tar.gz           https://archive.apache.org/dist/hive/hive-${HIVE_VERSION}
+downloadIfNotPresent downloads hadoop-${HIVE_HADOOP_VERSION}.tar.gz             https://archive.apache.org/dist/hadoop/common/hadoop-${HIVE_HADOOP_VERSION}
+downloadIfNotPresent downloads hbase-${HBASE_VERSION}-bin.tar.gz                https://archive.apache.org/dist/hbase/${HBASE_VERSION}
+downloadIfNotPresent downloads postgresql-42.2.16.jre7.jar                      https://search.maven.org/remotecontent?filepath=org/postgresql/postgresql/42.2.16.jre7
 # needed by ranger-atlas-plugin
-downloadIfNotPresent commons-compress-1.8.1.jar                       https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.8.1
-downloadIfNotPresent commons-lang3-3.3.2.jar                          https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.3.2
+downloadIfNotPresent downloads commons-compress-1.8.1.jar                       https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.8.1
+downloadIfNotPresent downloads commons-lang3-3.3.2.jar                          https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.3.2
+# atlas
+downloadIfNotPresent dist/atlas apache-atlas-${ATLAS_VERSION}-hbase-hook.tar.gz https://github.com/amiorin/ddp/releases/download/1.0
+downloadIfNotPresent dist/atlas apache-atlas-${ATLAS_VERSION}-hive-hook.tar.gz  https://github.com/amiorin/ddp/releases/download/1.0
+downloadIfNotPresent dist/atlas apache-atlas-${ATLAS_VERSION}-server.tar.gz     https://github.com/amiorin/ddp/releases/download/1.0
+# ranger
+downloadIfNotPresent dist/ranger ranger-${RANGER_VERSION}-admin.tar.gz        https://github.com/amiorin/ddp/releases/download/1.0
+downloadIfNotPresent dist/ranger ranger-${RANGER_VERSION}-atlas-plugin.tar.gz https://github.com/amiorin/ddp/releases/download/1.0
+downloadIfNotPresent dist/ranger ranger-${RANGER_VERSION}-hive-plugin.tar.gz  https://github.com/amiorin/ddp/releases/download/1.0
