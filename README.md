@@ -99,7 +99,7 @@ Explain the Query Fabric for streams.
 * Ranger http://localhost:6080
 
 ## Demo
-In the company ACME there are two domains: Sales and Marketing. This domains have their own DWH solution based on Postgres. The company uses two Starburst Trino cluster to build a Query Fabric on top of the 2 silos.
+In the company ACME there are two domains: Sales and Marketing. These domains have their own DWH solution based on Postgres. The company uses two Starburst Trino cluster to build a Query Fabric on top of the 2 silos.
 
 ```sql
 -- marketing cluster
