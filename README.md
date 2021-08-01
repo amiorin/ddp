@@ -40,7 +40,7 @@ Explain the Query Fabric for streams.
 
 1. Create 1 AWS account and 1 S3 Bucket. It requires 3 Glue Catalogs and you can have 1 Glue Catalog per account and region, therefore you need to specify 3 different regions in the ```.env``` file.
 
-1. Create an ```.env``` file starting from ```.env.template```. You need two AWS accounts and you need to setup the credentials in two different profiles.
+1. Create an ```.env``` file starting from ```.env.template```.
 
 1. Request a trial license to Starburst https://www.starburst.io/
 
