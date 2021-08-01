@@ -19,12 +19,11 @@
 set -xe
 
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/marketing.properties
-connector.name=hive
-hive.metastore=glue
-hive.security=allow-all
-hive.metastore.glue.region=eu-central-1
-hive.metastore.glue.catalogid=${AWS_ACCOUNT}
-hive.metastore.glue.default-warehouse-dir=${AWS_BUCKET}
+connector.name=postgresql
+connection-url=jdbc:postgresql://ddp-postgres.example.com:5432/marketing
+connection-user=trino
+connection-password=ddpR0cks!
+allow-drop-table=true
 redirection.config-source=SERVICE
 cache-service.uri=http://ddp-cache2.example.com:8180
 EOF
@@ -39,4 +38,13 @@ ssl.truststore.path=etc/keystore.jks
 ssl.truststore.password=changeit
 redirection.config-source=SERVICE
 cache-service.uri=http://ddp-cache2.example.com:8180
+EOF
+
+cat <<EOF > ${STARBURST_HOME}/etc/catalog/cache.properties
+connector.name=hive
+hive.metastore=glue
+hive.security=allow-all
+hive.metastore.glue.catalogid=${AWS_ACCOUNT}
+hive.metastore.glue.region=${AWS_REGION_MARKETING}
+hive.metastore.glue.default-warehouse-dir=${AWS_BUCKET_MARKETING}
 EOF

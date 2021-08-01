@@ -1,4 +1,52 @@
 ###
 GET http://localhost:21000/api/atlas/v2/types/typedefs
-Authorization: Basic admin:atlasR0cks!
+Authorization: Basic admin:ddpR0cks!
 Content-Type: application/json
+
+###
+GET http://localhost:6080/service/xusers/users
+Authorization: Basic admin:ddpR0cks!
+Content-Type: application/json
+
+###
+GET http://localhost:6080/service/xusers/users/9
+Authorization: Basic admin:ddpR0cks!
+Content-Type: application/xml
+
+###
+POST http://localhost:6080/service/xusers/users
+Authorization: Basic admin:ddpR0cks!
+Content-Type: application/json
+
+{ "name":"user1",
+  "firstName":"user1",
+  "lastName": "user1",
+  "loginId": "user1",
+  "emailAddress" : null,
+  "description" : "user1 desc",
+  "password" : "user1pass",
+  "groupIdList":[],
+  "status":1,
+  "isVisible":1,
+  "userRoleList": [ "ROLE_USER" ],
+  "userSource": 1
+}
+
+###
+POST http://localhost:6080/service/xusers/users
+Authorization: Basic admin:ddpR0cks!
+Content-Type: application/json
+
+{ "name":"user2",
+  "firstName":"user2",
+  "lastName": "user2",
+  "loginId": "user2",
+  "emailAddress" : null,
+  "description" : "user2 desc",
+  "password" : "user2pass",
+  "groupIdList":[],
+  "status":1,
+  "isVisible":1,
+  "userRoleList": [ "ROLE_USER" ],
+  "userSource": 1
+}

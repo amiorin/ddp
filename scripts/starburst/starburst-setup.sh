@@ -26,6 +26,8 @@ cp ${SCRIPTS}/keystore.jks       /etc/sep/keystore.jks
 
 touch ${STARBURST_HOME}/etc/password.db
 htpasswd -b -B -C 10 ${STARBURST_HOME}/etc/password.db ddp ddpR0cks!
+htpasswd -b -B -C 10 ${STARBURST_HOME}/etc/password.db user1 ddpR0cks!
+htpasswd -b -B -C 10 ${STARBURST_HOME}/etc/password.db user2 ddpR0cks!
 
 cat <<EOF > ${STARBURST_HOME}/etc/config.properties
 coordinator=true
@@ -97,7 +99,7 @@ EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/jvm.config
 -server
--Xmx500M
+-Xmx1G
 -XX:-UseBiasedLocking
 -XX:+UseG1GC
 -XX:G1HeapRegionSize=32M
@@ -124,16 +126,11 @@ EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/catalog/global.properties
 connector.name=hive
-hive.metastore.uri=thrift://ddp-hive.example.com:9083
-hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
+hive.metastore=glue
 hive.security=allow-all
-EOF
-
-cat <<EOF > ${STARBURST_HOME}/etc/catalog/cache.properties
-connector.name=delta-lake
-hive.metastore.uri=thrift://ddp-hive.example.com:9083
-hive.config.resources=etc/core-site.xml,etc/hdfs-site.xml
-hive.security=allow-all
+hive.metastore.glue.catalogid=${AWS_ACCOUNT}
+hive.metastore.glue.region=${AWS_REGION_GLOBAL}
+hive.metastore.glue.default-warehouse-dir=${AWS_BUCKET_GLOBAL}
 EOF
 
 cat <<EOF > ${STARBURST_HOME}/etc/core-site.xml

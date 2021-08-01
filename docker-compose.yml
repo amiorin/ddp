@@ -250,9 +250,12 @@ services:
       - HTTP_PORT=8080
       - NAME=marketing
       - DOWNLOADS=/ddp/downloads
-      - AWS_PROFILE=${AWS_PROFILE_MARKETING}
-      - AWS_ACCOUNT=${AWS_ACCOUNT_MARKETING}
-      - AWS_BUCKET=${AWS_BUCKET_MARKETING}
+      - AWS_PROFILE=${AWS_PROFILE}
+      - AWS_ACCOUNT=${AWS_ACCOUNT}
+      - AWS_BUCKET_MARKETING=${AWS_BUCKET_MARKETING}
+      - AWS_REGION_MARKETING=${AWS_REGION_MARKETING}
+      - AWS_BUCKET_GLOBAL=${AWS_BUCKET_GLOBAL}
+      - AWS_REGION_GLOBAL=${AWS_REGION_GLOBAL}
     volumes:
       - ${PWD}:/ddp
       - ${HOME}/.aws:/home/starburst/.aws
@@ -277,9 +280,12 @@ services:
       - HTTP_PORT=8080
       - NAME=sales
       - DOWNLOADS=/ddp/downloads
-      - AWS_PROFILE=${AWS_PROFILE_STARBURST}
-      - AWS_ACCOUNT=${AWS_ACCOUNT_STARBURST}
-      - AWS_BUCKET=${AWS_BUCKET_STARBURST}
+      - AWS_PROFILE=${AWS_PROFILE}
+      - AWS_ACCOUNT=${AWS_ACCOUNT}
+      - AWS_BUCKET_SALES=${AWS_BUCKET_SALES}
+      - AWS_REGION_SALES=${AWS_REGION_SALES}
+      - AWS_BUCKET_GLOBAL=${AWS_BUCKET_GLOBAL}
+      - AWS_REGION_GLOBAL=${AWS_REGION_GLOBAL}
     volumes:
       - ${PWD}:/ddp
       - ${HOME}/.aws:/home/starburst/.aws

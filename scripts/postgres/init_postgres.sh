@@ -38,4 +38,10 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
 
     CREATE DATABASE redirections2;
     GRANT ALL PRIVILEGES ON DATABASE redirections2 TO cache;
+
+    CREATE USER trino WITH PASSWORD 'ddpR0cks!';
+    CREATE DATABASE marketing;
+    GRANT ALL PRIVILEGES ON DATABASE marketing TO trino;
+    CREATE DATABASE sales;
+    GRANT ALL PRIVILEGES ON DATABASE sales TO trino;
 EOSQL

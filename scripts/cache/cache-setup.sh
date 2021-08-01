@@ -37,7 +37,33 @@ EOF
 
 cat <<EOF > ${CACHE_HOME}/etc/rules.json
 {
-  "rules": []
+  "defaultGracePeriod": "5m",
+  "rules": [
+    {
+      "catalogName": "marketing",
+      "schemaName": "public",
+      "tableName": "web_sales",
+      "cacheCatalog": "cache",
+      "cacheSchema": "marketing",
+      "refreshInterval": "10m"
+    },
+    {
+      "catalogName": "marketing",
+      "schemaName": "public",
+      "tableName": "date_dim",
+      "cacheCatalog": "cache",
+      "cacheSchema": "marketing",
+      "refreshInterval": "10m"
+    },
+    {
+      "catalogName": "sales",
+      "schemaName": "public",
+      "tableName": "item",
+      "cacheCatalog": "cache",
+      "cacheSchema": "sales",
+      "refreshInterval": "10m"
+    }
+  ]
 }
 EOF
 

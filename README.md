@@ -24,8 +24,13 @@ Docker Data Platform is a Query Fabric sandbox that runs on you computer. A Quer
    * **Secured at scale.** Scalable security is achieved with RBAC and ABAC. Users are not granted SELECT to the single table but to the attribute and the attribute is associated with the columns. Column lineage allows these attributes to propagate automatically.
    * **Without data movement.** Data movement is an anti-pattern in data. Usually metadata is lost during the data movement. Query Fabric advocate for a semantic layer declined per domain made with views.
    * **Queryable at scale.** Table redirections and local caching provide the performance without creating duplicates in the catalog of assets.
-   * **One SQL.** The underline SQL dialects of the different databases is creating friction. A lot of cleaning of data is done with SQL views that are not portable. In a Query Fabric there is only one SQL and all views are defined in one language.
+   * **One SQL.** The underline SQL dialects of the different databases create friction. A lot of cleaning of data is done with SQL views that are not portable. In a Query Fabric there is only one SQL and all views are defined in one language.
    * **Forever.** SQL is almost 50 years old but every company has legacy databases. Using a Query Fabric on top of the physical databases will make the phase out of legacy databases much easier because it doesn't require a migration of the SQL code written by users.
+
+If you just would like to see a demo of it, you can watch [this video](https://www.youtube.com/watch?v=2Ia4jLQ3sOM).
+
+## Todo
+Explain the Query Fabric for streams.
 
 ## Usage
 1. Ensure that you have recent version of Docker installed from [docker.io](http://www.docker.io) (as of this writing: Engine 20.10.5, Compose 1.28.5).
@@ -33,7 +38,7 @@ Docker Data Platform is a Query Fabric sandbox that runs on you computer. A Quer
 
 1. Set this folder as your working directory.
 
-1. Create 2 AWS accounts with 2 buckets.
+1. Create 1 AWS account and 1 S3 Bucket. It requires 3 Glue Catalogs and you can have 1 Glue Catalog per account and region, therefore you need to specify 3 different regions in the ```.env``` file.
 
 1. Create an ```.env``` file starting from ```.env.template```. You need two AWS accounts and you need to setup the credentials in two different profiles.
 
@@ -92,6 +97,76 @@ Docker Data Platform is a Query Fabric sandbox that runs on you computer. A Quer
 * Atlas http://localhost:21000
 * Hive http://localhost:10002
 * Ranger http://localhost:6080
+
+## Demo
+In the company ACME there are two domains: Sales and Marketing. This domains have their own DWH solution based on Postgres. The company uses two Starburst Trino cluster to build a Query Fabric on top of the 2 silos.
+
+```sql
+-- marketing cluster
+drop table marketing.public.web_sales
+drop table marketing.public.date_dim
+create table marketing.public.web_sales as select * from tpcds.sf1.web_sales
+create table marketing.public.date_dim as select * from tpcds.sf1.date_dim
+create schema if not exists cache.sales
+create schema if not exists cache.marketing
+-- sales cluster
+drop table marketing.public.item
+create table sales.public.item as select * from tpcds.sf1.item
+create schema if not exists cache.sales
+create schema if not exists cache.marketing
+-- global (anywhere)
+create schema if not exists global.sales
+create schema if not exists global.marketing
+create or replace view global.sales.item security invoker as select * from sales.public.item
+create or replace view global.marketing.web_sales security invoker as select * from marketing.public.web_sales
+create or replace view global.marketing.date_dim security invoker as select * from marketing.public.date_dim
+-- query
+SELECT 'web' AS channel,
+       'ws_bill_customer_sk' col_name,
+        d_year,
+        d_qoy,
+        i_category,
+        ws_ext_sales_price ext_sales_price
+FROM global.marketing.web_sales web_sales
+JOIN global.sales.item item ON (web_sales.ws_item_sk=item.i_item_sk)
+JOIN global.marketing.date_dim date_dim ON (web_sales.ws_sold_date_sk=date_dim.d_date_sk)
+WHERE ws_bill_customer_sk IS NULL
+```
+
+## Redirections
+The rules for redirections are shared between all Trino clusters.
+
+```json
+{
+  "defaultGracePeriod": "5m",
+  "rules": [
+    {
+      "catalogName": "marketing",
+      "schemaName": "public",
+      "tableName": "web_sales",
+      "cacheCatalog": "cache",
+      "cacheSchema": "marketing",
+      "refreshInterval": "10m"
+    },
+    {
+      "catalogName": "marketing",
+      "schemaName": "public",
+      "tableName": "date_dim",
+      "cacheCatalog": "cache",
+      "cacheSchema": "marketing",
+      "refreshInterval": "10m"
+    },
+    {
+      "catalogName": "sales",
+      "schemaName": "public",
+      "tableName": "item",
+      "cacheCatalog": "cache",
+      "cacheSchema": "sales",
+      "refreshInterval": "10m"
+    }
+  ]
+}
+```
 
 ## Misc
 ```sql
